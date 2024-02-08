@@ -38,7 +38,7 @@
 
 // Input deadzones (snapping points)
 #define INPUT_DEADZONE_WIDTH 30
-#define INPUT_DEADZONE_STOPS {1000, 1500, 2000}
+#define INPUT_DEADZONE_STOPS (1000, 1500, 2000)
 
 // Input ranges
 
