@@ -24,6 +24,120 @@
 #define _ARG_14(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, ...)    A14
 #define _ARG_15(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, ...)    A15
 #define _ARG_16(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, ...)    A16
+#define _ARG_17(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, ...)    A17
+#define _ARG_18(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, ...)    A18
+#define _ARG_19(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19...)    A19
+#define _ARG_20(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, ...)    A20
+#define _ARG_21(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, ...)    A21
+#define _ARG_22(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, ...)    A22
+#define _ARG_23(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, ...)    A23
+#define _ARG_24(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, ...)    A24
+#define _ARG_25(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, ...)    A25
+#define _ARG_26(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, ...)    A26
+#define _ARG_27(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, ...)    A27
+#define _ARG_28(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, ...)    A28
+#define _ARG_29(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, ...)    A29
+#define _ARG_30(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, ...)    A30
+#define _ARG_31(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, ...)    A31
+#define _ARG_32(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, ...)    A32
+#define _ARG_33(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, ...)    A33
+#define _ARG_34(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, ...)    A34
+#define _ARG_35(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, ...)    A35
+#define _ARG_36(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, ...)    A36
+#define _ARG_37(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, ...)    A37
+#define _ARG_38(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, A38, ...)    A38
+#define _ARG_39(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, A38, A39, ...)    A39
+#define _ARG_40(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29, A30, A31, A32, A33, A34, A35, A36, A37, A38, A39, A40, ...)    A40
+
+#define _MAP_1(F, L) F(ARG_N(0, L))
+#define _MAP_2(F, L) _MAP_1(F, L);F(ARG_N(1, L))
+#define _MAP_3(F, L) _MAP_2(F, L);F(ARG_N(2, L))
+#define _MAP_4(F, L) _MAP_3(F, L);F(ARG_N(3, L))
+#define _MAP_5(F, L) _MAP_4(F, L);F(ARG_N(4, L))
+#define _MAP_6(F, L) _MAP_5(F, L);F(ARG_N(5, L))
+#define _MAP_7(F, L) _MAP_6(F, L);F(ARG_N(6, L))
+#define _MAP_8(F, L) _MAP_7(F, L);F(ARG_N(7, L))
+#define _MAP_9(F, L) _MAP_8(F, L);F(ARG_N(8, L))
+#define _MAP_10(F, L) _MAP_9(F, L);F(ARG_N(9, L))
+#define _MAP_11(F, L) _MAP_10(F, L);F(ARG_N(10, L))
+#define _MAP_12(F, L) _MAP_11(F, L);F(ARG_N(11, L))
+#define _MAP_13(F, L) _MAP_12(F, L);F(ARG_N(12, L))
+#define _MAP_14(F, L) _MAP_13(F, L);F(ARG_N(13, L))
+#define _MAP_15(F, L) _MAP_14(F, L);F(ARG_N(14, L))
+#define _MAP_16(F, L) _MAP_15(F, L);F(ARG_N(15, L))
+#define _MAP_17(F, L) _MAP_16(F, L);F(ARG_N(16, L))
+#define _MAP_18(F, L) _MAP_17(F, L);F(ARG_N(17, L))
+#define _MAP_19(F, L) _MAP_18(F, L);F(ARG_N(18, L))
+#define _MAP_20(F, L) _MAP_19(F, L);F(ARG_N(19, L))
+#define _MAP_21(F, L) _MAP_20(F, L);F(ARG_N(20, L))
+#define _MAP_22(F, L) _MAP_21(F, L);F(ARG_N(21, L))
+#define _MAP_23(F, L) _MAP_22(F, L);F(ARG_N(22, L))
+#define _MAP_24(F, L) _MAP_23(F, L);F(ARG_N(23, L))
+#define _MAP_25(F, L) _MAP_24(F, L);F(ARG_N(24, L))
+#define _MAP_26(F, L) _MAP_25(F, L);F(ARG_N(25, L))
+#define _MAP_27(F, L) _MAP_26(F, L);F(ARG_N(26, L))
+#define _MAP_28(F, L) _MAP_27(F, L);F(ARG_N(27, L))
+#define _MAP_29(F, L) _MAP_28(F, L);F(ARG_N(28, L))
+#define _MAP_30(F, L) _MAP_29(F, L);F(ARG_N(29, L))
+#define _MAP_31(F, L) _MAP_30(F, L);F(ARG_N(30, L))
+#define _MAP_32(F, L) _MAP_31(F, L);F(ARG_N(31, L))
+#define _MAP_33(F, L) _MAP_32(F, L);F(ARG_N(32, L))
+#define _MAP_34(F, L) _MAP_33(F, L);F(ARG_N(33, L))
+#define _MAP_35(F, L) _MAP_34(F, L);F(ARG_N(34, L))
+#define _MAP_36(F, L) _MAP_35(F, L);F(ARG_N(35, L))
+#define _MAP_37(F, L) _MAP_36(F, L);F(ARG_N(36, L))
+#define _MAP_38(F, L) _MAP_37(F, L);F(ARG_N(37, L))
+#define _MAP_39(F, L) _MAP_38(F, L);F(ARG_N(38, L))
+#define _MAP_40(F, L) _MAP_39(F, L);F(ARG_N(39, L))
+#define __MAP_N(N, F, L) _MAP_##N(F, L)
+#define _MAP_N(N, F, L) __MAP_N(N, F, L)
+
+#define MAP(F, L) _MAP_N(SIZE_LIST(L), F, L)
+
+#define _MAP_R_1(F, L) F(ARG_N(0, L))
+#define _MAP_R_2(F, L) F(ARG_N(1, L));_MAP_R_1(F, L)
+#define _MAP_R_3(F, L) F(ARG_N(2, L));_MAP_R_2(F, L)
+#define _MAP_R_4(F, L) F(ARG_N(3, L))_MAP_R_3(F, L)
+#define _MAP_R_5(F, L) F(ARG_N(4, L));_MAP_R_4(F, L)
+#define _MAP_R_6(F, L) F(ARG_N(5, L));_MAP_R_5(F, L)
+#define _MAP_R_7(F, L) F(ARG_N(6, L));_MAP_R_6(F, L)
+#define _MAP_R_8(F, L) F(ARG_N(7, L));_MAP_R_7(F, L)
+#define _MAP_R_9(F, L) F(ARG_N(8, L));_MAP_R_8(F, L)
+#define _MAP_R_10(F, L) F(ARG_N(9, L));_MAP_R_9(F, L
+#define _MAP_R_11(F, L) F(ARG_N(10, L));_MAP_R_10(F, L)
+#define _MAP_R_12(F, L) F(ARG_N(11, L));_MAP_R_11(F, L)
+#define _MAP_R_13(F, L) F(ARG_N(12, L));_MAP_R_12(F, L)
+#define _MAP_R_14(F, L) F(ARG_N(13, L));_MAP_R_13(F, L)
+#define _MAP_R_15(F, L) F(ARG_N(14, L));_MAP_R_14(F, L)
+#define _MAP_R_16(F, L) F(ARG_N(15, L));_MAP_R_15(F, L)
+#define _MAP_R_17(F, L) F(ARG_N(16, L));_MAP_R_16(F, L)
+#define _MAP_R_18(F, L) F(ARG_N(17, L));_MAP_R_17(F, L)
+#define _MAP_R_19(F, L) F(ARG_N(18, L));_MAP_R_18(F, L)
+#define _MAP_R_20(F, L) F(ARG_N(19, L));_MAP_R_19(F, L)
+#define _MAP_R_21(F, L) F(ARG_N(20, L));_MAP_R_20(F, L)
+#define _MAP_R_22(F, L) F(ARG_N(21, L));_MAP_R_21(F, L)
+#define _MAP_R_23(F, L) F(ARG_N(22, L));_MAP_R_22(F, L)
+#define _MAP_R_24(F, L) F(ARG_N(23, L));_MAP_R_23(F, L)
+#define _MAP_R_25(F, L) F(ARG_N(24, L));_MAP_R_24(F, L)
+#define _MAP_R_26(F, L) F(ARG_N(25, L));_MAP_R_25(F, L)
+#define _MAP_R_27(F, L) F(ARG_N(26, L));_MAP_r_26(F, L)
+#define _MAP_R_28(F, L) F(ARG_N(27, L));_MAP_R_27(F, L)
+#define _MAP_R_29(F, L) F(ARG_N(28, L));_MAP_R_28(F, L)
+#define _MAP_R_30(F, L) F(ARG_N(29, L));_MAP_R_29(F, L)
+#define _MAP_R_31(F, L) F(ARG_N(30, L));_MAP_R_30(F, L)
+#define _MAP_R_32(F, L) F(ARG_N(31, L));_MAP_R_31(F, L)
+#define _MAP_R_33(F, L) F(ARG_N(32, L));_MAP_R_32(F, L)
+#define _MAP_R_34(F, L) F(ARG_N(33, L));_MAP_R_33(F, L)
+#define _MAP_R_35(F, L) F(ARG_N(34, L));_MAP_R_34(F, L)
+#define _MAP_R_36(F, L) F(ARG_N(35, L));_MAP_R_35(F, L)
+#define _MAP_R_37(F, L) F(ARG_N(36, L));_MAP_R_36(F, L)
+#define _MAP_R_38(F, L) F(ARG_N(37, L));_MAP_R_37(F, L)
+#define _MAP_R_39(F, L) F(ARG_N(38, L));_MAP_R_38(F, L)
+#define _MAP_R_40(F, L) F(ARG_N(39, L));_MAP_R_39(F, L)
+#define __MAP_R_N(N, F, L) _MAP_R_##N(F, L)
+#define _MAP_R_N(N, F, L) __MAP_R_N(N, F, L)
+
+#define MAP_R(F, L) _MAP_R_N(SIZE_LIST(L), F, L)
 
 #define SECOND(a,b,...)  b
 #define BOOL_TEST(V...) SECOND(V, 0)
