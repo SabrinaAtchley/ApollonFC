@@ -7,6 +7,7 @@
  */
 
 #include "unit-tests/test-vector16.h"
+#include "unit-tests/test-receivers.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -14,7 +15,7 @@
  *  FLIGHT_CONTROLLER_UNIT_TEST_VECTOR16
  *  FLIGHT_CONTROLLER_UNIT_TEST_RECEIVERS
  */
-#define FLIGHT_CONTROLLER_UNIT_TEST_VECTOR16
+#define FLIGHT_CONTROLLER_UNIT_TEST_RECEIVERS
 
 
 void setup() {
