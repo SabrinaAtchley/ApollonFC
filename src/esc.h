@@ -1,5 +1,5 @@
-#ifndef FLIGHT_CONTROLLER_SRC_ESC_H
-#define FLIGHT_CONTROLLER_SRC_ESC_H
+#ifndef APOLLON_FC_SRC_ESC_H
+#define APOLLON_FC_SRC_ESC_H
 
 #include "../configuration.h"
 #include <Servo.h>

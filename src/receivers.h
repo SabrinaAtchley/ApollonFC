@@ -1,5 +1,5 @@
-#ifndef FLIGHT_CONTROLLER_SRC_RECEIVERS_H
-#define FLIGHT_CONTROLLER_SRC_RECEIVERS_H
+#ifndef APOLLON_FC_SRC_RECEIVERS_H
+#define APOLLON_FC_SRC_RECEIVERS_H
 
 /* Classes which handle RF receivers
  * Receiver configuration is handled through flags in configuration.h

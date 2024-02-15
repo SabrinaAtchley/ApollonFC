@@ -1,5 +1,5 @@
-#ifndef FLIGHT_CONTROLLER_SRC_PERIPHERALS_H
-#define FLIGHT_CONTROLLER_SRC_PERIPHERALS_H
+#ifndef APOLLON_FC_SRC_PERIPHERALS_H
+#define APOLLON_FC_SRC_PERIPHERALS_H
 
 /* Defines several small hardware interfaces for taking direct user input
  * and output, e.g. piezo buzzers, LEDs, buttons, POV displays, etc

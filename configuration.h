@@ -1,5 +1,5 @@
-#ifndef CONFIGURATION_H
-#define CONFIGURATION_H
+#ifndef APOLLON_FC_CONFIGURATION_H
+#define APOLLON_FC_CONFIGURATION_H
 
 /* System Configuration
  *

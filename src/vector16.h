@@ -1,5 +1,5 @@
-#ifndef FLIGHT_CONTROLLER_SRC_VECTOR16_H
-#define FLIGHT_CONTROLLER_SRC_VECTOR16_H
+#ifndef APOLLON_FC_SRC_VECTOR16_H
+#define APOLLON_FC_SRC_VECTOR16_H
 
 /* Mathematical vector used for representing aircraft
  * attitude, position, kinematics, and controls.

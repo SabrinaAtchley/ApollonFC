@@ -1,5 +1,5 @@
-#ifndef FLIGHT_CONTROLLER_SRC_MACROS_H
-#define FLIGHT_CONTROLLER_SRC_MACROS_H
+#ifndef APOLLON_FC_SRC_MACROS_H
+#define APOLLON_FC_SRC_MACROS_H
 
 // Use NUM_ARGS(__VA_ARGS__) to get the number of variadic arguments
 #define _NUM_ARGS(_,n,m,l,k,j,i,h,g,f,e,d,c,b,a,Z,Y,X,W,V,U,T,S,R,Q,P,O,N,M,L,K,J,I,H,G,F,E,D,C,B,A,OUT,...) OUT
