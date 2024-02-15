@@ -10,7 +10,7 @@
 
 #define ERROR_MESSAGE_0 "Err0: Vector math error - lengths must match"
 #define ERROR_MESSAGE_1 "Err1: Vector index out of bounds"
-#define ERROR_MESSAGE_2
+#define ERROR_MESSAGE_2 "Err2: Receiver channel number out of bounds"
 #define ERROR_MESSAGE_3
 #define ERROR_MESSAGE_4
 #define ERROR_MESSAGE_5

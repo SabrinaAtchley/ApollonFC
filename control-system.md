@@ -34,7 +34,7 @@ Need "mode" state variable, one byte should be enough.
 | ---------: | ---------: | :------------ |
 |    l l l l |          0 | Vector math error - lengths must match |
 |    l l l h |          1 | Vector index out of bounds             |
-|    l l h l |          2 |               |
+|    l l h l |          2 | Receiver channel number out of bounds  |
 |    l l h h |          3 |               |
 |    l h l l |          4 |               |
 |    l h l h |          5 |               |
@@ -53,6 +53,7 @@ Need "mode" state variable, one byte should be enough.
 # To-Do
 
 - Write unit tests for libraries and functions
+- Implement current-sensing support
 - ~~Write unit test framework and create an Arduino test suite sketch~~
 
 
