@@ -33,17 +33,16 @@ void unitReceivers() {
 
     delay(3000);
     TEST_SECTION(Controls, {
-      uint16_t channels[INPUT_CHANNELS];
 
       // Plot controls for receiver testing
       while(true) {
-        receiver.getControls(channels);
-        for (uint8_t i = 0; i < INPUT_CHANNELS; i++) {
+        receiver.update();
+        for (uint8_t ch = 1; ch <= INPUT_CHANNELS; ch++) {
           Serial.print("Ch ");
-          Serial.print(i + 1);
+          Serial.print(ch);
           Serial.print(":");
-          Serial.print(channels[i]);
-          if (i + 1 < INPUT_CHANNELS);
+          Serial.print(receiver.getChannel(ch));
+          if (ch < INPUT_CHANNELS);
             Serial.print(",");
         }
         Serial.println();

@@ -42,13 +42,20 @@ public:
    * e.g. #define RECEIVER_T PPM_Receiver
    */
   const String receiverType;
+  uint16_t channels[INPUT_CHANNELS];
 
   Receiver(const String type) : receiverType(type) {};
 
+  uint16_t getChannel(const uint8_t ch) {
+    if (ch < 1 || ch > INPUT_CHANNELS)
+      ERROR(2);
+    return channels[ch - 1];
+  }
+
   // Fetch raw channel signals, then convert into final pilot input controls
-  void getControls(uint16_t *channels) {
+  void update() {
     for (uint8_t ch = 0; ch < INPUT_CHANNELS; ch++) {
-      getSignal(channels, ch);
+      getSignal(ch);
       applyDeadzones(channels[ch]);
     }
   }
@@ -67,7 +74,7 @@ protected:
   /* Fetch signal from receiver for a given channel
    * (input range [INPUT_MOTOR_MIN, INPUT_MOTOR_MAX])
    */
-  virtual void getSignal(uint16_t *channels, const uint8_t ch) = 0;
+  virtual void getSignal(const uint8_t ch) = 0;
 };
 
 
@@ -84,7 +91,7 @@ public:
   PPM_Receiver() : Receiver("PPM_Receiver"), ppmReader(SERIAL_RECEIVER_PIN, INPUT_CHANNELS) {}
 
 private:
-  void getSignal(uint16_t *channels, const uint8_t ch) {
+  void getSignal(const uint8_t ch) {
     channels[ch] = ppmReader.latestValidChannelValue(ch + 1, INPUT_MOTOR_MIN);
   }
 };
