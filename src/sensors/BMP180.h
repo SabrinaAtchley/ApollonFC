@@ -12,7 +12,7 @@
  */
 
 enum : byte {
-  BMP180_ADDRESS =- 0x77, // I2C address
+  BMP180_ADDRESS = 0x77, // I2C address
   BMP180_CHIP_ID = 0x55, // ID held in ID register, static across all BMP180's
   BMP180_REGISTER_AC1 = 0XAA, // R int16_t, calibration data
   BMP180_REGISTER_AC2 = 0XAC, // R int16_t, calibration data
