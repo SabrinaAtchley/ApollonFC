@@ -9,6 +9,7 @@
 #include "unit-tests/test-vector16.h"
 #include "unit-tests/test-receivers.h"
 #include "unit-tests/test-esc.h"
+#include "unit-tests/test-sensors.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -16,8 +17,9 @@
  *  APOLLON_FC_UNIT_TEST_VECTOR16
  *  APOLLON_FC_UNIT_TEST_RECEIVERS
  *  APOLLON_FC_UNIT_TEST_ESC
+ *  APOLLON_FC_UNIT_TEST_SENSORS
  */
-#define APOLLON_FC_UNIT_TEST_ESC
+#define APOLLON_FC_UNIT_TEST_SENSORS
 
 
 void setup() {
@@ -31,6 +33,9 @@ void setup() {
   #endif
   #ifdef APOLLON_FC_UNIT_TEST_ESC
     unitESC();
+  #endif
+  #ifdef APOLLON_FC_UNIT_TEST_SENSORS
+    unitSensors();
   #endif
 }
 
