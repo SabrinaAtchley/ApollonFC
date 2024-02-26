@@ -3,6 +3,11 @@
 
 #include <Wire.h>
 
+struct Connection {
+  const bool keepAlive;
+  const bool close;
+};
+
 // Abstract
 class Sensor {
 
@@ -22,59 +27,46 @@ class I2C_Sensor : Sensor {
 private:
   const byte address; // Device I2C address
 
-  void selectRegister(const byte reg, const bool closeConnection = false) {
-    Wire.beginTransmission(address);
-    Wire.write(reg);
-    Wire.endTransmission(closeConnection);
-  }
-
 protected:
+  static constexpr Connection connection = {false, true};
+
   I2C_Sensor(const byte addr) : address(addr) {
     // Enable I2C
     Wire.begin();
   };
 
-  void write8(const byte reg, const byte value, const bool closeConnection = true) {
+  void selectRegister(const byte reg, const bool closeConnection) {
+    Wire.beginTransmission(address);
+    Wire.write(reg);
+    Wire.endTransmission(closeConnection);
+  }
+
+  void write8(const byte reg, const byte value, const bool closeConnection) {
     Wire.beginTransmission(address);
     Wire.write(reg);
     Wire.write(value);
     Wire.endTransmission(closeConnection);
   }
 
-  void read8(const byte reg, byte &value, const bool closeConnection = true) {
-    selectRegister(reg, false);
-
+  template<typename T>
+  void read8(T &value, const bool closeConnection) {
     Wire.requestFrom(address, (byte) 1);
-    value = Wire.read();
+    value = (T) Wire.read();
     Wire.endTransmission(closeConnection);
   }
 
-
-  void read16(const byte reg, uint16_t &value, const bool closeConnection = true) {
-    selectRegister(reg, false);
-
+  template<typename T>
+  void read16(T &value, const bool closeConnection) {
     Wire.requestFrom(address, (byte) 2);
-    value = (Wire.read() << 8 | Wire.read());
-    Wire.endTransmission(closeConnection);
-  }
-  void read16(const byte reg, int16_t &value, const bool closeConnection = true) {
-    selectRegister(reg, false);
-
-    Wire.requestFrom(address, (byte) 2);
-    value = (Wire.read() << 8 | Wire.read());
+    value = (T) (Wire.read() << 8 | Wire.read());
     Wire.endTransmission(closeConnection);
   }
 
-  void readIntoArray(
-      const byte reg,
-      byte *arr,
-      const uint8_t n,
-      const bool closeConnection = true
-  ) {
-    selectRegister(reg, false);
+  template<typename T>
+  void readIntoArray(T *arr, const uint8_t n, const bool closeConnection) {
     Wire.requestFrom(address, (byte) n);
     for (uint8_t i = 0; i < n; i++)
-      arr[i] = Wire.read();
+      arr[i] = (T) Wire.read();
     Wire.endTransmission(closeConnection);
   }
 };
