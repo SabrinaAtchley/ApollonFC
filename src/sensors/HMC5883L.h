@@ -3,6 +3,13 @@
 
 #include "../sensor.h"
 
+/* HMC5883L Sensor
+ * Interfaces: I2C
+ * Measures: 3-axis magnetic field, internal temperature
+ * Estimates: n/a
+ * Datasheet: https://cdn-shop.adafruit.com/datasheets/HMC5883L_3-Axis_Digital_Compass_IC.pdf
+ */
+
 enum : byte {
   HMC5883L_ADDRESS = 0x1E,
   HMC5883L_MODE = 0x01, // 1-bit mode: 0 continuous measurement, 1 takes a new measurement only after the old one was read
