@@ -3,35 +3,6 @@
 
 #include <Wire.h>
 
-/* FIFO byte buffer */
-class ByteBuffer {
-private:
-  const uint8_t length; // Max 255 elements
-  byte *data;
-  uint8_t start = 0;
-  uint8_t end = 0;
-
-public:
-
-  constexpr ByteBuffer(byte* _data, const uint8_t _n)
-    : length(_n), data(_data) {};
-
-  byte pop() {
-    if (start == end) // No data available
-      return 0x00;
-
-    const byte b = data[start];
-    start = (start < length) ? start + 1 : start = 0;
-    return b;
-  }
-
-  void push(const byte b) {
-    data[end] = b;
-    end = (end < length) ? end + 1 : end = 0;
-  }
-
-};
-
 // Abstract
 class Sensor {
 
@@ -51,10 +22,10 @@ class I2C_Sensor : Sensor {
 private:
   const byte address; // Device I2C address
 
-  selectRegister(const byte reg) {
+  void selectRegister(const byte reg, const bool closeConnection = false) {
     Wire.beginTransmission(address);
     Wire.write(reg);
-    Wire.endTransmission();
+    Wire.endTransmission(closeConnection);
   }
 
 protected:
@@ -63,48 +34,49 @@ protected:
     Wire.begin();
   };
 
-  void write8(const byte reg, const byte value) {
+  void write8(const byte reg, const byte value, const bool closeConnection = true) {
     Wire.beginTransmission(address);
     Wire.write(reg);
     Wire.write(value);
-    Wire.endTransmission();
+    Wire.endTransmission(closeConnection);
   }
 
-  void read8(const byte reg, byte &value) {
-    selectRegister(reg);
+  void read8(const byte reg, byte &value, const bool closeConnection = true) {
+    selectRegister(reg, false);
 
     Wire.requestFrom(address, (byte) 1);
     value = Wire.read();
-    Wire.endTransmission();
+    Wire.endTransmission(closeConnection);
   }
 
 
-  void read16(const byte reg, uint16_t &value) {
-    selectRegister(reg);
+  void read16(const byte reg, uint16_t &value, const bool closeConnection = true) {
+    selectRegister(reg, false);
 
     Wire.requestFrom(address, (byte) 2);
     value = (Wire.read() << 8 | Wire.read());
-    Wire.endTransmission();
+    Wire.endTransmission(closeConnection);
   }
-  void read16(const byte reg, int16_t &value) {
-    selectRegister(reg);
+  void read16(const byte reg, int16_t &value, const bool closeConnection = true) {
+    selectRegister(reg, false);
 
     Wire.requestFrom(address, (byte) 2);
     value = (Wire.read() << 8 | Wire.read());
-    Wire.endTransmission();
+    Wire.endTransmission(closeConnection);
   }
 
-
-  void readIntoBuffer(const byte reg, const uint8_t n, ByteBuffer &buffer) {
-    selectRegister(reg);
-
+  void readIntoArray(
+      const byte reg,
+      byte *arr,
+      const uint8_t n,
+      const bool closeConnection = true
+  ) {
+    selectRegister(reg, false);
     Wire.requestFrom(address, (byte) n);
     for (uint8_t i = 0; i < n; i++)
-      buffer.push(Wire.read());
-    Wire.endTransmission();
+      arr[i] = Wire.read();
+    Wire.endTransmission(closeConnection);
   }
-
-
 };
 
 #endif /* APOLLON_FC_SRC_SENSORS_H */
