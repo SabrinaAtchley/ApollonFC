@@ -14,7 +14,7 @@
 
 void test_hmc5883l() {
   unsigned long t = millis(); // time of last update
-  Sensor_HMC5883L hmc5883l(0x01, 0x03); // gain, oversampling, outRate, bias
+  Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3); // mode, gain, oversampling, outRate, bias
   float heading;
 
   Serial.println("HMC5883L");
