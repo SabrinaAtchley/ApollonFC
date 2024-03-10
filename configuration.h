@@ -8,8 +8,8 @@
 
 #include "src/macros.h"
 
-#define ERROR_MESSAGE_0 "Err0: Vector math error - lengths must match"
-#define ERROR_MESSAGE_1 "Err1: Vector index out of bounds"
+#define ERROR_MESSAGE_0
+#define ERROR_MESSAGE_1
 #define ERROR_MESSAGE_2 "Err2: Receiver channel number out of bounds"
 #define ERROR_MESSAGE_3 "Err3: I2C device misconfiguration - check wires and addresses"
 #define ERROR_MESSAGE_4

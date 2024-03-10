@@ -32,8 +32,8 @@ Need "mode" state variable, one byte should be enough.
 
 | Noise Code | Digit Code | Error message |
 | ---------: | ---------: | :------------ |
-|    l l l l |          0 | Vector math error - lengths must match                  |
-|    l l l h |          1 | Vector index out of bounds                              |
+|    l l l l |          0 |               |
+|    l l l h |          1 |               |
 |    l l h l |          2 | Receiver channel number out of bounds                   |
 |    l l h h |          3 | I2C device misconfiguration - check wires and addresses |
 |    l h l l |          4 |               |
