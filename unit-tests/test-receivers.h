@@ -42,8 +42,7 @@ void unitReceivers() {
           Serial.print(ch);
           Serial.print(":");
           Serial.print(receiver.getChannel(ch));
-          if (ch < INPUT_CHANNELS);
-            Serial.print(",");
+          Serial.print(",");
         }
         Serial.println();
       }
