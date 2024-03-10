@@ -165,8 +165,5 @@
 
 #define _ENA_1(O)           BOOL_TEST(CAT(_IS, CAT(ENA_, O))
 #define ENABLED(V...)       DO(ENA,&&,V)
-#define ERROR_MESSAGE(c) CAT(ERROR_MESSAGE, c)
-
-#define ERROR(c) BUZZER_ERROR_CODE(c)
 
 #endif
