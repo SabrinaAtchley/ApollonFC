@@ -38,7 +38,7 @@
 
 // Input deadzones (snapping points)
 #define INPUT_DEADZONE_WIDTH 30
-#define INPUT_DEADZONE_STOPS (1500, 2000)
+#define INPUT_DEADZONE_STOPS (1000, 1500, 2000)
 
 // Input ranges
 
@@ -111,5 +111,16 @@
 // motor 1, 2, 3, 4
 #define ESC_PINS (3, 10, 11, 12) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
 
+
+/* Sensor modules
+ *
+ * Defines which sensors should be loaded and used
+ * In-depth sensor configuration such as device address
+ * can be found in sensor-configuration.h
+ */
+
+#define SENSOR_BMP180
+#define SENSOR_HMC5883L
+#define SENSOR_MPU6050
 
 #endif
