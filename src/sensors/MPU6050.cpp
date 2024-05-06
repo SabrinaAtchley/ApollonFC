@@ -78,59 +78,14 @@ bool Sensor_MPU6050::update() {
   temp = (temp + 12420) / 34; // datasheet formula: (temp / 340) + 36.53 Shouldn't overflow with expected temperature ranges
 
   // Accelerometer - Stores in 0.001g (0.001 * 9.81m/s^2)
-  switch (accelScale) {
-    case MPU6050_ACCEL_SCALE_2G:
-      accel.x = (int32_t) accel.x * 1000 >> 14;
-      accel.y = (int32_t) accel.y * 1000 >> 14;
-      accel.z = (int32_t) accel.z * 1000 >> 14;
-      break;
-
-    case MPU6050_ACCEL_SCALE_4G:
-      accel.x = (int32_t) accel.x * 1000 >> 13;
-      accel.y = (int32_t) accel.y * 1000 >> 13;
-      accel.z = (int32_t) accel.z * 1000 >> 13;
-      break;
-
-    case MPU6050_ACCEL_SCALE_8G:
-      accel.x = (int32_t) accel.x * 1000 >> 12;
-      accel.y = (int32_t) accel.y * 1000 >> 12;
-      accel.z = (int32_t) accel.z * 1000 >> 12;
-      break;
-
-    case MPU6050_ACCEL_SCALE_16G:
-      accel.x = (int32_t) accel.x * 1000 >> 11;
-      accel.y = (int32_t) accel.y * 1000 >> 11;
-      accel.z = (int32_t) accel.z * 1000 >> 11;
-      break;
-  }
-
+  accel.x = (int32_t) accel.x * 1000 >> (14 - ((byte) accelScale >> 3));
+  accel.y = (int32_t) accel.y * 1000 >> (14 - ((byte) accelScale >> 3));
+  accel.z = (int32_t) accel.z * 1000 >> (14 - ((byte) accelScale >> 3));
 
   // Gyroscope -Stores in 0.001°/s
-  switch (gyroScale) {
-    case MPU6050_GYRO_SCALE_250:
-      gyro.x = (int64_t) gyro.x * 1000000 >> 17;
-      gyro.y = (int64_t) gyro.y * 1000000 >> 17;
-      gyro.z = (int64_t) gyro.z * 1000000 >> 17;
-      break;
-
-    case MPU6050_GYRO_SCALE_500:
-      gyro.x = (int64_t) gyro.x * 1000000 >> 16;
-      gyro.y = (int64_t) gyro.y * 1000000 >> 16;
-      gyro.z = (int64_t) gyro.z * 1000000 >> 16;
-      break;
-
-    case MPU6050_GYRO_SCALE_1000:
-      gyro.x = (int64_t) gyro.x * 1000000 >> 15;
-      gyro.y = (int64_t) gyro.y * 1000000 >> 15;
-      gyro.z = (int64_t) gyro.z * 1000000 >> 15;
-      break;
-
-    case MPU6050_GYRO_SCALE_2000:
-      gyro.x = (int64_t) gyro.x * 1000000 >> 14;
-      gyro.y = (int64_t) gyro.y * 1000000 >> 14;
-      gyro.z = (int64_t) gyro.z * 1000000 >> 14;
-      break;
-  }
+  gyro.x = (int64_t) gyro.x * 1000000 >> (17 - ((byte) gyroScale >> 3));
+  gyro.y = (int64_t) gyro.y * 1000000 >> (17 - ((byte) gyroScale >> 3));
+  gyro.z = (int64_t) gyro.z * 1000000 >> (17 - ((byte) gyroScale >> 3));
 
   return true;
 }
