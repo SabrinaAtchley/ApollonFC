@@ -78,14 +78,16 @@ bool Sensor_MPU6050::update() {
   temp = (temp + 12420) / 34; // datasheet formula: (temp / 340) + 36.53 Shouldn't overflow with expected temperature ranges
 
   // Accelerometer - Stores in 0.001g (0.001 * 9.81m/s^2)
-  accel.x = (int32_t) accel.x * 1000 >> (14 - ((byte) accelScale >> 3));
-  accel.y = (int32_t) accel.y * 1000 >> (14 - ((byte) accelScale >> 3));
-  accel.z = (int32_t) accel.z * 1000 >> (14 - ((byte) accelScale >> 3));
+  uint8_t binScale = 14 - ((byte) accelScale >> 3);
+  accel.x = (int32_t) accel.x * 1000 >> binScale;
+  accel.y = (int32_t) accel.y * 1000 >> binScale;
+  accel.z = (int32_t) accel.z * 1000 >> binScale;
 
   // Gyroscope -Stores in 0.001°/s
-  gyro.x = (int64_t) gyro.x * 1000000 >> (17 - ((byte) gyroScale >> 3));
-  gyro.y = (int64_t) gyro.y * 1000000 >> (17 - ((byte) gyroScale >> 3));
-  gyro.z = (int64_t) gyro.z * 1000000 >> (17 - ((byte) gyroScale >> 3));
+  binScale = 17 - ((byte) gyroScale >> 3);
+  gyro.x = (int64_t) gyro.x * 1000000 >> binScale;
+  gyro.y = (int64_t) gyro.y * 1000000 >> binScale;
+  gyro.z = (int64_t) gyro.z * 1000000 >> binScale;
 
   return true;
 }
