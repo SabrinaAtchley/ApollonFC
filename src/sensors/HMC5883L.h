@@ -94,15 +94,6 @@ private:
   hmc5883l_gain_t gain; // Higher gain # decreases actual gain and increases signal range
   const hmc5883l_mode_t mode;
   static constexpr int16_t gainLSB_Gauss[] = {1370, 1090, 820, 660, 440, 390, 330, 230};
-
-  /* Read status register for lock and ready bits */
-  void readStatus(const bool closeConnection);
-
-  /* Sets mode register, which begins measurement
-   * For continuous-mode operation, this only needs to be called once
-   * For single-measurement operation, this needs to be called after data is read
-   */
-  void startMeasurement(const bool closeConnection);
 };
 
 #endif

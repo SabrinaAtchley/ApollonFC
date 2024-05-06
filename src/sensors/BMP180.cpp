@@ -1,54 +1,66 @@
 #include "BMP180.h"
 #include "../error.h"
 
-void Sensor_BMP180::readCalibrationData(const bool closeConnection) {
-  selectRegister(BMP180_REGISTER_AC1, connection.keepAlive);
-  read16(ac1, connection.keepAlive);
-  read16(ac2, connection.keepAlive);
-  read16(ac3, connection.keepAlive);
-  read16(ac4, connection.keepAlive);
-  read16(ac5, connection.keepAlive);
-  read16(ac6, connection.keepAlive);
-  read16(b1, connection.keepAlive);
-  read16(b2, connection.keepAlive);
-  read16(mb, connection.keepAlive);
-  read16(mc, connection.keepAlive);
-  read16(md, closeConnection);
-}
+bool Sensor_BMP180::update() {
+  // Read SCO bit - 1 when converting, 0 when finished (data ready)
+  byte sco;
 
-bool Sensor_BMP180::readSCO(const bool closeConnection) {
-  byte ctrl_meas;
-  selectRegister(BMP180_REGISTER_CTRL_MEAS, connection.keepAlive);
-  read8(ctrl_meas, closeConnection);
-  return 0x20 & ctrl_meas; // return bit 5, sco
+  beginTransmission(BMP180_REGISTER_CTRL_MEAS); {
+    request(1);
+    read8(sco);
+    sco &= 0x20; // include only bit 5, sco
+  } endTransmission(sco ? connection.close : connection.keepAlive);
+
+  if (sco) { // Still converting
+    return false;
+  }
+
+  // Grab data and handle updates
+  switch(step) {
+    case BMP180_STEP_GET_UT:
+      // Read UT (raw temperature)
+      beginTransmission(BMP180_REGISTER_OUT_MSB); {
+        request(2);
+        read16(ut);
+        // Send pressure request command
+        changeRegister(BMP180_REGISTER_CTRL_MEAS);
+        write8(BMP180_CMD_PRESSURE + (mode << 6));
+      } endTransmission(connection.close);
+
+      step = BMP180_STEP_GET_UP;
+      break;
+
+    case BMP180_STEP_GET_UP:
+      // Read UP (raw pressure)
+      beginTransmission(BMP180_REGISTER_OUT_MSB); {
+        uint16_t msb;
+        uint8_t xlsb;
+        request(3);
+        read16(msb);
+        read8(xlsb);
+        up = (((uint32_t) msb << 8) + xlsb) >> (8 - mode);
+        // Send temperature request command
+        changeRegister(BMP180_REGISTER_CTRL_MEAS);
+        write8(BMP180_CMD_TEMPERATURE);
+      } endTransmission(connection.close);
+
+      step = BMP180_STEP_COMPENSATE;
+
+    case BMP180_STEP_COMPENSATE:
+      computeB5();
+      compensateTemperature();
+      compensatePressure();
+      pressureToAltitude();
+      step = BMP180_STEP_GET_UT;
+      return true; // Signal to FC that new data is available
+  }
+  return false;
 }
 
 void Sensor_BMP180::computeB5() {
   int32_t x1 = ((ut - (int32_t) ac6) * (int32_t) ac5) >> 15;
   int32_t x2 = ((int32_t) mc << 11) / (x1 + (int32_t) md);
   b5 = x1 + x2;
-}
-
-void Sensor_BMP180::requestTemperature(const bool closeConnection) {
-  write8(BMP180_REGISTER_CTRL_MEAS, BMP180_CMD_TEMPERATURE, closeConnection);
-}
-
-void Sensor_BMP180::requestPressure(const bool closeConnection) {
-  write8(BMP180_REGISTER_CTRL_MEAS, BMP180_CMD_PRESSURE + (mode << 6), closeConnection);
-}
-
-void Sensor_BMP180::getRawTemperature(const bool closeConnection) {
-  selectRegister(BMP180_REGISTER_OUT_MSB, connection.keepAlive);
-  read16(ut, closeConnection);
-}
-
-void Sensor_BMP180::getRawPressure(const bool closeConnection) {
-  uint16_t msb;
-  uint8_t xlsb;
-  selectRegister(BMP180_REGISTER_OUT_MSB, connection.keepAlive);
-  read16(msb, connection.keepAlive);
-  read8(xlsb, closeConnection);
-  up = (((uint32_t) msb << 8) + xlsb) >> (8 - mode);
 }
 
 void Sensor_BMP180::compensateTemperature() {
@@ -92,42 +104,28 @@ Sensor_BMP180::Sensor_BMP180(const bmp180_mode_t m, const uint32_t _seaLevel)
     : I2C_Sensor(BMP180_ADDRESS), mode(m), seaLevel(_seaLevel)
 {
   uint8_t id;
-  selectRegister(BMP180_REGISTER_CHIPID, connection.keepAlive);
-  read8(id, connection.keepAlive);
-  if (id != BMP180_CHIP_ID)
+  beginTransmission(BMP180_REGISTER_CHIPID); {
+    request(1);
+    read8(id);
+  } endTransmission(connection.keepAlive);
+
+  if (id != BMP180_CHIP_ID) {
     ERROR(3); // I2C device misconfiguration error
-
-  readCalibrationData(connection.close);
-}
-
-bool Sensor_BMP180::update() {
-  switch(step) {
-    case BMP180_STEP_GET_UT:
-      if (readSCO(connection.close)) // Close connection in case of break
-        break; // Still converting
-
-      // UT is finished converting
-      getRawTemperature(connection.keepAlive);
-      requestPressure(connection.close);
-      step = BMP180_STEP_GET_UP;
-      break;
-
-    case BMP180_STEP_GET_UP:
-      if (readSCO(connection.close)) // Close connection in case of break
-        break; // Still converting
-
-      // UP is finished converting
-      getRawPressure(connection.keepAlive);
-      requestTemperature(connection.close); // Start measurements for next cycle
-      step = BMP180_STEP_COMPENSATE;
-
-    case BMP180_STEP_COMPENSATE:
-      computeB5();
-      compensateTemperature();
-      compensatePressure();
-      pressureToAltitude();
-      step = BMP180_STEP_GET_UT;
-      return true; // Signal to FC that new data is available
   }
-  return false;
+
+  // Read calibration data
+  beginTransmission(BMP180_REGISTER_AC1); {
+    request(22);
+    read16(ac1);
+    read16(ac2);
+    read16(ac3);
+    read16(ac4);
+    read16(ac5);
+    read16(ac6);
+    read16(b1);
+    read16(b2);
+    read16(mb);
+    read16(mc);
+    read16(md);
+  } endTransmission(connection.close);
 }

@@ -72,28 +72,8 @@ public:
   float altitude = 0; // Altitude in meters
 
 private:
-  /* Reads calibration data and sets calibration variables
-   * ac1, ac2, ac3, ac4, ac5, ac6, b1, b2, mb, mc, md
-   */
-  void readCalibrationData(const bool closeConnection);
-
-  // reads SCO bit to see if conversion is finished
-  bool readSCO(const bool closeConnection);
-
   // param: ut, calibration data
   void computeB5();
-
-  // Begins temperature conversion
-  void requestTemperature(const bool closeConnection);
-
-  // Begins pressure conversion
-  void requestPressure(const bool closeConnection);
-
-  // Reads raw temperature (assumes ready)
-  void getRawTemperature(const bool closeConnection);
-
-  // Reads raw pressure (assumes ready)
-  void getRawPressure(const bool closeConnection);
 
   // Compensates UT reading
   void compensateTemperature();
