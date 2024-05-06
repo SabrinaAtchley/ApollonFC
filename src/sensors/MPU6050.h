@@ -5,9 +5,6 @@
 #include "../sensor.h"
 
 
-// int16_t gyro = ((int32_t) GYRO_OUT << FS_SEL) / 131
-
-
 /* MPU6050 Sensor
  * Interfaces: I2C
  * Measures: 3-axis gyroscope, 3-axis accelerometer, internal temperature
