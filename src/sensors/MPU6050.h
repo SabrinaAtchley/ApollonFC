@@ -132,8 +132,8 @@ private:
   bool isDataReady();
 
   // Functions used for calculating factory trims from test values
-  float getAccelFT(const uint16_t &accel_test);
-  float getGyroFT(const uint16_t &gyro_test);
+  inline float getAccelFT(const uint16_t &accel_test);
+  inline float getGyroFT(const uint16_t &gyro_test);
 
 public:
   struct { int16_t x, y, z; } accel; // Stored in 0.001g multiples

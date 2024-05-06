@@ -7,7 +7,7 @@ bool Sensor_MPU6050::isDataReady() {
   return status & 0x01; // return bit 1 (DATA_RDY_INT)
 }
 
-float Sensor_MPU6050::getAccelFT(const uint16_t &accel_test) {
+inline float Sensor_MPU6050::getAccelFT(const uint16_t &accel_test) {
   if (accel_test == 0) {
     return 0;
   }
@@ -15,7 +15,7 @@ float Sensor_MPU6050::getAccelFT(const uint16_t &accel_test) {
   return 4096 * pow(0.92, (accel_test - 1) / 30.0);
 }
 
-float Sensor_MPU6050::getGyroFT(const uint16_t &gyro_test) {
+inline float Sensor_MPU6050::getGyroFT(const uint16_t &gyro_test) {
   if (gyro_test == 0) {
     return 0;
   }
