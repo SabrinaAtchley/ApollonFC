@@ -30,7 +30,7 @@ public:
 
   const T &getTail() const;
   const T &getHead() const;
-  void map(void f(const T&)) const; // Takes a function and maps it over the queue
+  const T &getIndex(const uint8_t &idx) const; // Returns value at the given index, relative to tail
 };
 
 #include "arrayQueue.tpp"

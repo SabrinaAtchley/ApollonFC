@@ -42,8 +42,6 @@ const T &ArrayQueue<T>::getHead() const {
 }
 
 template<typename T>
-void ArrayQueue<T>::map(void f(const T&)) const {
-  for (uint8_t i = tail; i < size; i++) {
-    f(data[(i + tail) % maxSize]);
-  }
+const T &ArrayQueue<T>::getIndex(const uint8_t &idx) const {
+  return data[(tail + idx) % maxSize];
 }

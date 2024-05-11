@@ -67,6 +67,19 @@ void unitArrayQueue() {
       TEST_CASE(3.9, queue.getTail() == 21);
       TEST_CASE(3.10, queue.getHead() == 28);
     }); /* Overflow Append */
+
+    TEST_SECTION(getIndex, {
+      TEST_CASE(4.1, queue.getIndex(0) == 21);
+      TEST_CASE(4.2, queue.getIndex(1) == 22);
+      TEST_CASE(4.3, queue.getIndex(2) == 23);
+      TEST_CASE(4.4, queue.getIndex(3) == 24);
+      TEST_CASE(4.5, queue.getIndex(4) == 25);
+      TEST_CASE(4.6, queue.getIndex(5) == 26);
+      TEST_CASE(4.7, queue.getIndex(6) == 27);
+      TEST_CASE(4.8, queue.getIndex(7) == 28);
+      TEST_CASE(4.9, queue.getTail() == queue.getIndex(0));
+      TEST_CASE(4.10, queue.getHead() == queue.getIndex(queue.size - 1));
+    }); /* getIndex */
   }); /* ArrayQueue */
 }
 
