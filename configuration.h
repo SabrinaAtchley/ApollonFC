@@ -33,14 +33,13 @@
  * receiver type and setup, channels
  */
 
+// Input ranges
 #define INPUT_MOTOR_MIN 1000
 #define INPUT_MOTOR_MAX 2000
 
 // Input deadzones (snapping points)
 #define INPUT_DEADZONE_WIDTH 30
 #define INPUT_DEADZONE_STOPS (1000, 1500, 2000)
-
-// Input ranges
 
 
 
@@ -122,5 +121,18 @@
 #define SENSOR_BMP180
 #define SENSOR_HMC5883L
 #define SENSOR_MPU6050
+
+
+/* PID Configuration
+ *
+ * PID controllers take the error between the target state and estimate state
+ * as output by the sensor fusion algorithm and pilot control module
+ */
+
+ /* Number of previous errors that should be stored in the PID controller's buffer
+  * Do be aware that large values can greatly expand memory usage
+  */
+ #define PID_ERROR_BUFFER_SIZE 4
+
 
 #endif
