@@ -1,8 +1,7 @@
-#define TEST_MODE
+//#define TEST_MODE
 
 #ifdef TEST_MODE
 #include "unit-tests.h"
-#endif
-#ifndef TEST_MODE
+#else
 #include "main.h"
 #endif
