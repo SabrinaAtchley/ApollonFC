@@ -12,9 +12,7 @@
  */
 
 class MotorController {
-  SpeedController sc();
 
-
-}
+};
 
 #endif
