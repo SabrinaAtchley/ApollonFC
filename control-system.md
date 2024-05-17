@@ -61,3 +61,18 @@ Need "mode" state variable, one byte should be enough.
 - Consider revisting receivers.h and changing it to a zero-overhead abstraction
 - ~~Was working on Vector16, which will be used for the matrix equation in the motor control module. The PIDs will output one Vector16.~~
 - ~~Was working on unit tests for Vector16, added in Serial message for Buzzer errors.~~
+
+
+# Rough Timeline - Test Flights by July 2024
+
+- Ideally, I would like to be doing test flights during July 2024.
+- Remaining modules:
+  1. Motor control module - mixes PID outputs though the motor matrix to generate signals to send to motors
+  2. ~~PID class~~
+  3. Sensor fusion module
+  4. Main module, including sensor initialization
+
+|              May     |                                 June |                    July |
+| :------------------- | :----------------------------------- | :---------------------- |
+| ~~PID class~~        | Sensor fusion module (Kalman filter) | Test Flights and tuning |
+| Motor control module | Main module                          |                         |
