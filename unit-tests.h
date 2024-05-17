@@ -11,6 +11,7 @@
 #include "unit-tests/test-esc.h"
 #include "unit-tests/test-sensors.h"
 #include "unit-tests/test-array-queue.h"
+#include "unit-tests/test-pid.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -20,8 +21,9 @@
  *  APOLLON_FC_UNIT_TEST_ESC
  *  APOLLON_FC_UNIT_TEST_SENSORS
  *  APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
+ *  APOLLON_FC_UNIT_TEST_PID
  */
-#define APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
+#define APOLLON_FC_UNIT_TEST_PID
 
 
 void setup() {
@@ -41,6 +43,9 @@ void setup() {
   #endif
   #ifdef APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
     unitArrayQueue();
+  #endif
+  #ifdef APOLLON_FC_UNIT_TEST_PID
+    unitPID();
   #endif
 }
 
