@@ -166,4 +166,9 @@
 #define _ENA_1(O)           BOOL_TEST(CAT(_IS, CAT(ENA_, O))
 #define ENABLED(V...)       DO(ENA,&&,V)
 
+#define MIN(V, L) (V < L ? L : V)
+#define MAX(V, H) (V > H ? H : V)
+#define CLAMP(V, L, H) MIN(MAX(V, H), L)
+#define RANGEMAP(V, L1, H1, L2, H2) ((V - L1) * (H2 - L2) / (H1 - L1) + L2)
+
 #endif
