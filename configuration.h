@@ -129,10 +129,10 @@
  * as output by the sensor fusion algorithm and pilot control module
  */
 
- /* Number of previous errors that should be stored in the PID controller's buffer
-  * Do be aware that large values can greatly expand memory usage
-  */
- #define PID_ERROR_BUFFER_SIZE 4
+ // PID output range is mostly arbitrary. It can affect aggressiveness of response,
+ // but this is probably better tuned with the coefficients and/or motor mixing matrix
+ #define PID_OUTPUT_RANGE_MIN -100
+ #define PID_OUTPUT_RANGE_MAX 100
 
 
 #endif
