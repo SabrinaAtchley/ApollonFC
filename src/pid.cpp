@@ -6,7 +6,7 @@ PID::PID(
   const float _iMin, const float _iMax
 ) : kp(_kp), ki(_ki), kd(_kd),
     pScale(_pScale), iScale(_iScale), dScale(_dScale),
-    iMin(_iMin / _iScale), iMax(_iMax / _iScale) {}
+    iMin(_iMin), iMax(_iMax) {}
 
 void PID::setCoefficients(
   const float newKp, const float newKi, const float newKd
@@ -17,48 +17,53 @@ void PID::setCoefficients(
 }
 
 void PID::setIntegralBounds(const float newIMin, const float newIMax) {
-  iMin = newIMin / iScale;
-  iMax = newIMax / iScale;
+  iMin = newIMin;
+  iMax = newIMax;
 }
 
-const float PID::update(const float error, const unsigned long deltaT) {
-  proportional = error;
+const float PID::update(const float setPoint, const float value, const unsigned long deltaT) {
+  const float error = setPoint - value;
+  proportional = kp * pScale * error;
 
   /* Integral
    * For simplicity and to save clock cycles, we will use a trapezoidal method for now
    * Consider revisiting with a fourth-order Runge-Kutta if more accuracy is needed
    */
-  integral += (previousError + error) * deltaT / 2;
-  integral = CLAMP(integral, iMin, iMax);
-
+  integralSum += (previousError + error) * deltaT / 2;
+  integralSum = CLAMP(integralSum, iMin / ki / iScale, iMax / ki / iScale);
+  integral = ki * iScale * integralSum;
 
   /* Derivative
-   * For now, we will just do a simple 2 term derivative (slope of a line).
-   * Maybe revisit this with a polynomial interpolation later
+   * Uses Brown's Linear Exponential Smoothing to estimate the derivative
+   * Estimates the derivative of the process variable instead of the derivative
+   * of the error, to help combat derivative kick
    */
+  if (s1 == 0.0 && s2 == 0.0) {
+    s1 = value;
+    s2 = value;
+    derivative = 0.0;
+  }  else {
+    s1 = alpha * value + (1 - alpha) * s1;
+    s2 = alpha * s1 + (1 - alpha) * s2;
+    derivative = -kd * dScale * (s1 - s2) / (1 - alpha) * alpha;
+  }
 
-  // Since the difference in error between timesteps is so small, a large scaling factor
-  // is needed here to make the derivative term significant
-  derivative = (error - previousError) / deltaT;
   previousError = error;
-
   return CLAMP(
-      (kp * pScale * proportional)
-    + (ki * iScale * integral)
-    + (kd * dScale * derivative),
+    proportional + integral + derivative,
     PID_OUTPUT_RANGE_MIN,
     PID_OUTPUT_RANGE_MAX
   );
 }
 
 const float PID::getLastPTerm() const {
-  return kp * pScale * proportional;
+  return proportional;
 }
 
 const float PID::getLastITerm() const {
-  return ki * iScale * integral;
+  return integral;
 }
 
 const float PID::getLastDTerm() const {
-  return kd * dScale * derivative;
+  return derivative;
 }

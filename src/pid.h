@@ -11,6 +11,9 @@ private:
   const float pScale = 1, iScale = 1, dScale = 1;
   float previousError = 0.0;
   float proportional = 0.0, integral = 0.0, derivative = 0.0;
+  float integralSum = 0.0;
+  float s1 = 0.0, s2 = 0.0; // Used for derivative linear exponential smoothing
+  float alpha = 0.5; // 0 < alpha < 1, used for derivative LES
 
 public:
   bool enableIntegration = true;
@@ -25,7 +28,7 @@ public:
   void setIntegralBounds(const float newIMin, const float newIMax);
 
   // Takes a new error value and its delta-t and returns a new control value
-  const float update(const float error, const unsigned long deltaT);
+  const float update(const float setPoint, const float value, const unsigned long deltaT);
 
   // Return the last P,I,D terms used to make the output, for tuning and debug purposes
   // Includes coefficients

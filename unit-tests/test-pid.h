@@ -33,10 +33,10 @@ public:
 };
 
 void unitPID() {
-  float u = 0.0, setPoint = 20.0;
-  float kp = 8.0, ki = 2.0, kd = 4.0;
-  static constexpr float iMin = -2, iMax = 2;
-  static constexpr float pScale = 10, iScale = 0.01, dScale = 10000;
+  float u = 0.0, setPoint = 30.0;
+  float kp = 8.0, ki = 0.5, kd = 16.0;
+  static constexpr float iMin = -4, iMax = 4;
+  static constexpr float pScale = 10, iScale = 1, dScale = 10;
 
   PID pid(kp, ki, kd, pScale, iScale, dScale, iMin, iMax);
   HeaterSimulation heater;
@@ -49,7 +49,7 @@ void unitPID() {
     previousTime = currentTime;
 
     // Print setpoint and control variable
-    u = pid.update(setPoint - heater.temperature, deltaT);
+    u = pid.update(setPoint, heater.temperature, deltaT);
     heater.setDutyCycle(u);
     heater.update(deltaT);
 
@@ -59,6 +59,8 @@ void unitPID() {
     Serial.print(u);
     Serial.print(",process:");
     Serial.print(heater.temperature);
+    Serial.print(",error:");
+    Serial.print(setPoint - heater.temperature);
     Serial.print(",p:");
     Serial.print(pid.getLastPTerm());
     Serial.print(",i:");
