@@ -109,6 +109,34 @@
 #define MOTOR_AMOUNT 4
 // motor 1, 2, 3, 4
 #define ESC_PINS (3, 10, 11, 12) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
+// #define ESC_DO_CALIBRATION // Uncomment to automatically calibrate ESCs on startup every time
+
+/* Possibile configurations:
+ * QUAD_X
+ * QUAD_PLUS
+ *
+ */
+#define DRONE_CONFIGURATION QUAD_X
+
+/* Motor mixing matrices
+ * row 1 - contribution of motor 1 to yaw, pitch, roll, throttle
+ * row 2 - contribution of motor 2 to yaw, pitch, roll, throttle
+ * row 3 - contribution of motor 3 to yaw, pitch, roll, throttle
+ * row 4 - contribution of motor 4 to yaw, pitch, roll, throttle
+ * and so on for higher rotor counts
+ */
+#define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0,  1.0,  1.0}, \
+                                     { 1.0,  1.0, -1.0,  1.0}, \
+                                     { 1.0,  1.0,  1.0, -1.0}, \
+                                     { 1.0, -1.0, -1.0, -1.0} }
+
+#define MOTOR_MIXING_MATRIX_QUAD_PLUS { { 1.0, -1.0,  0.0, -1.0}, \
+                                        { 1.0,  1.0,  0.0, -1.0}, \
+                                        { 1.0,  0.0, -1.0,  1.0}, \
+                                        { 1.0,  0.0,  1.0,  1.0} }
+
+
+#define MOTOR_MIXING_MATRIX CAT(MOTOR_MIXING_MATRIX_, DRONE_CONFIGURATION)
 
 
 /* Sensor modules
@@ -129,10 +157,43 @@
  * as output by the sensor fusion algorithm and pilot control module
  */
 
- // PID output range is mostly arbitrary. It can affect aggressiveness of response,
- // but this is probably better tuned with the coefficients and/or motor mixing matrix
+ /* PID output range is mostly arbitrary. It can affect aggressiveness of response,
+  * but this is probably better tuned with the coefficients and/or motor mixing matrix
+  */
  #define PID_OUTPUT_RANGE_MIN -100
  #define PID_OUTPUT_RANGE_MAX 100
+ /* PID coefficients
+  * These are the main PID tuning settings.
+  * Each tuple contains the (kp, ki, kd) coefficients, for the
+  * proportional, integral, and derivative terms, respectively.
+  * In general:
+  *   the proportional term determine how aggressive the response is to current error
+  *   the integral term corrects for long-term and steady state errors over time
+  *   the derivative term dampens the over and undershoots typical of the integral term
+  * For more information, please consult a PID tuning guide online
+  */
+ #define PID_YAW_COEFFICIENTS   ARG_LIST(10, 1, 5)
+ #define PID_PITCH_COEFFICIENTS ARG_LIST(10, 1, 5)
+ #define PID_ROLL_COEFFICIENTS  ARG_LIST(10, 1, 5)
+ /* PID scales
+  * These scales are for more convenient coefficients. The "true" coefficient
+  * used is just k * scale, e.g. kp * pScale
+  * The use here is instead of using a kp of 120, you can have
+  * kp = 1.2 and pScale = 100. If you want, you can set these to 1 and just use
+  * the coefficients on their own.
+  *
+  * (pScale, iScale, dScale)
+  */
+ #define PID_YAW_SCALE   ARG_LIST(10, 1, 10)
+ #define PID_PITCH_SCALE ARG_LIST(10, 1, 10)
+ #define PID_ROLL_SCALE  ARG_LIST(10, 1, 10)
+ /* Lower and upper limits for integral terms
+  * WARNING: large limits can and produce very large over and undershoots
+  * and present a safety hazard to you and your equipment. Modify with caution
+  */
+ #define PID_YAW_INTEGRAL_LIMITS   ARG_LIST(-5, 5)
+ #define PID_PITCH_INTEGRAL_LIMITS ARG_LIST(-5, 5)
+ #define PID_ROLL_INTEGRAL_LIMITS  ARG_LIST(-5, 5)
 
 
 #endif
