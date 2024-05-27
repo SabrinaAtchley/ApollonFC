@@ -7,6 +7,8 @@
  * Useful for passing around to PID controllers and other modules
  */
 
+#include "../configuration.h"
+
 struct StateEstimate {
   float target;
   float estimate;
@@ -17,6 +19,10 @@ struct DroneState {
   StateEstimate pitchSpeed;
   StateEstimate rollSpeed;
   StateEstimate throttle;
+  StateEstimate pitchAngle;
+  StateEstimate rollAngle;
+  byte flightMode = FLIGHT_MODE_DEFAULT;
+  bool isArmed = false;
 };
 
 #endif /* APOLLON_FC_SRC_STATE_H */
