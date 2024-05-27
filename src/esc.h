@@ -16,19 +16,12 @@ namespace SpeedController {
   #define SPEED_CONTROLLER_WRITE_ALL(SIGNALS, S) for (uint8_t i = 0; i < MOTOR_AMOUNT; i++) {SIGNALS[i] = S;}; SpeedController::write(SIGNALS);
   #define SPEED_CONTROLLER_CALIBRATE(SIGNALS) SPEED_CONTROLLER_WRITE_ALL(SIGNALS, INPUT_MOTOR_MAX); delay(6000); SPEED_CONTROLLER_WRITE_ALL(SIGNALS, INPUT_MOTOR_MIN); delay(3000);
 
-  Servo escs[MOTOR_AMOUNT];
+  extern Servo escs[MOTOR_AMOUNT];
+
   // Initialize ESCs
-  uint8_t i = 0;
-
-  void setup() {
-    #define SRC_ESC_SPEEDCONTROLLER_ESC_INIT(P) escs[i++].attach(P, INPUT_MOTOR_MIN, INPUT_MOTOR_MAX)
-    MAP(SRC_ESC_SPEEDCONTROLLER_ESC_INIT, ESC_PINS);
-  }
-
-  void write(const uint16_t *signals) {
-    for (uint8_t i = 0; i < MOTOR_AMOUNT; i++)
-      escs[i].writeMicroseconds(signals[i]);
-  }
+  void setup();
+  // Send signal data to ESCs
+  void write(const uint16_t *signals);
 
 } /* SpeedController */
 
