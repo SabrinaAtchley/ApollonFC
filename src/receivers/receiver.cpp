@@ -5,7 +5,7 @@
 #include "../../configuration.h"
 
 
-uint16_t Receiver::getChannel(const uint8_t ch) {
+const uint16_t Receiver::getChannel(const uint8_t ch) const {
   if (ch < 1 || ch > INPUT_CHANNELS) {
     ERROR(2);
   }

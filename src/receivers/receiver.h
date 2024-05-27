@@ -25,7 +25,7 @@ public:
   uint16_t channels[INPUT_CHANNELS];
 
   // Get latest value for a particular channel
-  uint16_t getChannel(const uint8_t ch);
+  const uint16_t getChannel(const uint8_t ch) const;
 
   // Fetch raw channel signals, then convert into final pilot input controls
   void update();
