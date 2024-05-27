@@ -10,8 +10,8 @@
 #include "../configuration.h"
 
 struct StateEstimate {
-  float target;
-  float estimate;
+  float target = 0.0;
+  float estimate = 0.0;
 };
 
 struct DroneState {
