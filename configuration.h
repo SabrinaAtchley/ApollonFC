@@ -257,9 +257,10 @@
   *   the derivative term dampens the over and undershoots typical of the integral term
   * For more information, please consult a PID tuning guide online
   */
- #define PID_YAW_COEFFICIENTS   ARG_LIST(10, 1, 5)
- #define PID_PITCH_COEFFICIENTS ARG_LIST(10, 1, 5)
- #define PID_ROLL_COEFFICIENTS  ARG_LIST(10, 1, 5)
+ #define PID_THROTTLE_COEFFICIENTS ARG_LIST(10, 1, 5)
+ #define PID_YAW_COEFFICIENTS      ARG_LIST(10, 1, 5)
+ #define PID_PITCH_COEFFICIENTS    ARG_LIST(10, 1, 5)
+ #define PID_ROLL_COEFFICIENTS     ARG_LIST(10, 1, 5)
  /* PID scales
   * These scales are for more convenient coefficients. The "true" coefficient
   * used is just k * scale, e.g. kp * pScale
@@ -269,16 +270,18 @@
   *
   * (pScale, iScale, dScale)
   */
- #define PID_YAW_SCALE   ARG_LIST(10, 1, 10)
- #define PID_PITCH_SCALE ARG_LIST(10, 1, 10)
- #define PID_ROLL_SCALE  ARG_LIST(10, 1, 10)
+ #define PID_THROTTLE_SCALE ARG_LIST(10, 1, 10)
+ #define PID_YAW_SCALE      ARG_LIST(10, 1, 10)
+ #define PID_PITCH_SCALE    ARG_LIST(10, 1, 10)
+ #define PID_ROLL_SCALE     ARG_LIST(10, 1, 10)
  /* Lower and upper limits for integral terms
   * WARNING: large limits can and produce very large over and undershoots
   * and present a safety hazard to you and your equipment. Modify with caution
   */
- #define PID_YAW_INTEGRAL_LIMITS   ARG_LIST(-5, 5)
- #define PID_PITCH_INTEGRAL_LIMITS ARG_LIST(-5, 5)
- #define PID_ROLL_INTEGRAL_LIMITS  ARG_LIST(-5, 5)
+ #define PID_THROTTLE_INTEGRAL_LIMITS ARG_LIST(-5, 5)
+ #define PID_YAW_INTEGRAL_LIMITS      ARG_LIST(-5, 5)
+ #define PID_PITCH_INTEGRAL_LIMITS    ARG_LIST(-5, 5)
+ #define PID_ROLL_INTEGRAL_LIMITS     ARG_LIST(-5, 5)
 
 
 #endif
