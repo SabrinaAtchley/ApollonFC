@@ -15,8 +15,8 @@
 
 #include "configuration.h"
 #include "src/receivers.h"
-#include "src/pid.h"
 #include "src/motor-controller.h"
+#include "src/pilot-control.h"
 #include "src/peripherals.h"
 
 // Sensor boards
@@ -30,28 +30,30 @@
 #include "src/sensors/MPU6050.h"
 #endif
 
+
+/* Class instance declarations */
+// Reads input from the radio controller
+RECEIVER_T receiver;
+// Converts receiver input into target drone state values
+PilotControl pilot; // This could be a namespace instead, or we could use it as non-instanced class
+// Handles PIDs, motor mixing, and writing to ESCs
+MotorController motors;
+
+
+// Sensor initialization
+// TODO: Revisit sensor configuration for the case of multiple sensors (e.g. 2 barometers)
+#ifdef SENSOR_BMP180
+Sensor_BMP180 bmp180(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
+#endif
+#ifdef SENSOR_HMC5883L
+Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
+#endif
+#ifdef SENSOR_MPU6050
+Sensor_MPU6050 mpu6050(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
+#endif
+
 void setup() {
   Serial.begin(9600);
-
-  RECEIVER_T receiver;
-
-  // Sensor initialization
-  // TODO: Revisit sensor configuration for the case of multiple sensors (e.g. 2 barometers)
-  #ifdef SENSOR_BMP180
-  Sensor_BMP180 bmp180(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
-  #endif
-  #ifdef SENSOR_HMC5883L
-  Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
-  #endif
-  #ifdef SENSOR_MPU6050
-  Sensor_MPU6050 mpu6050(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
-  #endif
-
-  // Placeholder PIDs
-  PID pidPitch(0, 0, 0, 0, 0);
-  PID pidRoll(0, 0, 0, 0, 0);
-  PID pidYaw(0, 0, 0, 0, 0);
-  PID pidThrottle(0, 0, 0, 0, 0);
 
   // Motor control module initialization here
 
