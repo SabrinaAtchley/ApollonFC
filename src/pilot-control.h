@@ -21,17 +21,17 @@
 
 class PilotControl {
 private:
-  inline double interpolate(
+  static inline double interpolate(
     const double c1,
     const double e1,
     const double e2,
     const float mid,
     const uint16_t v
-  ) const;
+  );
 
 public:
   // Updates drone target state using receiver data
-  void update(DroneState &state, RECEIVER_T &receiver);
+  static void update(DroneState &state, RECEIVER_T &receiver);
 };
 
 #endif /* APOLLON_FC_SRC_PILOT_CONTROL_H */

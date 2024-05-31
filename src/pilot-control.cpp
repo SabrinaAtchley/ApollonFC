@@ -33,13 +33,13 @@ constexpr double verticalSpeed_e1 = PILOT_INTERPOLATION_E1(PILOT_VERTICALSPEED_M
 constexpr double verticalSpeed_e2 = PILOT_INTERPOLATION_E2(PILOT_VERTICALSPEED_MIN, PILOT_VERTICALSPEED_MID, PILOT_VERTICALSPEED_MAX, verticalSpeed_c1);
 
 
-inline double PilotControl::interpolate(
+static inline double PilotControl::interpolate(
   const double c1,
   const double e1,
   const double e2,
   const float mid,
   const uint16_t v
-) const {
+) {
   const double t = RANGEMAP(
     v,
     INPUT_MOTOR_MIN, INPUT_MOTOR_MAX,
@@ -49,7 +49,7 @@ inline double PilotControl::interpolate(
   return c1 * (pow(e1, t) - pow(e2, -t)) + mid;
 }
 
-void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
+static void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
   /* Check if drone is armed
    * If drone is armed: isArmed = isArmSwitchDown
    * If drone is not armed: isArmed = isArmSwitchDown && isThrottleDown
