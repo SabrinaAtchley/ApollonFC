@@ -72,7 +72,7 @@ Need "mode" state variable, one byte should be enough.
   3. Sensor fusion module
   4. Main module, including sensor initialization
 
-|              May     |                                 June |                    July |
-| :------------------- | :----------------------------------- | :---------------------- |
-| ~~PID class~~        | Sensor fusion module (Kalman filter) | Test Flights and tuning |
-| Motor control module | Main module                          |                         |
+|              May         |                                 June |                    July |
+| :----------------------- | :----------------------------------- | :---------------------- |
+| ~~PID class~~            | Sensor fusion module (Kalman filter) | Test Flights and tuning |
+| ~~Motor control module~~ | Main module                          |                         |
