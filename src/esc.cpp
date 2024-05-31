@@ -8,7 +8,7 @@ void SpeedController::setup() {
   MAP(SRC_ESC_SPEEDCONTROLLER_ESC_INIT, ESC_PINS);
 }
 
-void write(const uint16_t *signals) {
+void SpeedController::write(const uint16_t *signals) {
   for (uint8_t i = 0; i < MOTOR_AMOUNT; i++) {
     SpeedController::escs[i].writeMicroseconds(signals[i]);
   }
