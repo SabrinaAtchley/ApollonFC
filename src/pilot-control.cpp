@@ -2,7 +2,7 @@
 
 #define IS_SWITCH_DOWN(CHANNEL) (receiver.getChannel(CHANNEL) == INPUT_MOTOR_MAX)
 
-#define _PILOT_INTERPOLATION_E1(K1, K2, C1) (K1 * K2 - sqrt(pow(K1 * K2, 2) - 4 * pow(C1, 2) * K1 * K2)) / (2 * C1 * K1)
+#define _PILOT_INTERPOLATION_E1(K1, K2, C1) log( (K1 * K2 - sqrt(pow(K1 * K2, 2) - 4 * pow(C1, 2) * K1 * K2)) / (2 * C1 * K1) )
 #define PILOT_INTERPOLATION_E1(MIN, MID, MAX, C1) _PILOT_INTERPOLATION_E1((MIN - MID), (MAX - MID), C1)
 #define PILOT_INTERPOLATION_E2(MIN, MID, MAX, C1) -_PILOT_INTERPOLATION_E1((MAX - MID), (MIN - MID), C1)
 
@@ -46,7 +46,7 @@ static inline double PilotControl::interpolate(
     (double) -1.0, (double) 1.0
   );
 
-  return c1 * (pow(e1, t) - pow(e2, -t)) + mid;
+  return c1 * (exp(t * e1) - exp(-t * e2)) + mid;
 }
 
 static void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
