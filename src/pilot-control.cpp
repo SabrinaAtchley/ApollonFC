@@ -38,13 +38,14 @@ inline float PilotControl::interpolate(
     const float* lut,
     const uint16_t v
   ) {
+  const uint16_t entries = (1 << PILOT_RESPONSE_CURVE_LUT_SIZE);
   const float index = (
       ((uint32_t)(v - INPUT_MOTOR_MIN))
-    * (PILOT_RESPONSE_CURVE_LUT_SIZE - 1)
+    * (entries - 1)
     / ((float) (INPUT_MOTOR_MAX - INPUT_MOTOR_MIN))
   );
   const uint16_t i0 = (uint16_t) index; // truncate
-  const uint16_t i1 = min(i0 + 1, PILOT_RESPONSE_CURVE_LUT_SIZE - 1);
+  const uint16_t i1 = min(i0 + 1, entries - 1);
   const float frac = index - i0;
 
   // LERP between i0 and i1
