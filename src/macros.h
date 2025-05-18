@@ -172,4 +172,32 @@
 #define CLAMP(V, L, H) MIN(MAX(V, H), L)
 #define RANGEMAP(V, L1, H1, L2, H2) ((V - L1) * (H2 - L2) / (H1 - L1) + L2)
 
+
+// Macros for generating brace-enclosed initializer lists
+#define _INIT_LIST_1(W, I, V...) W(I << 1, V),W((I << 1) + 1, V)
+#define _INIT_LIST_2(W, I, V...) _INIT_LIST_1(W, (I << 1), V),_INIT_LIST_1(W, ((I << 1) + 1), V)
+#define _INIT_LIST_3(W, I, V...) _INIT_LIST_2(W, (I << 1), V),_INIT_LIST_2(W, ((I << 1) + 1), V)
+#define _INIT_LIST_4(W, I, V...) _INIT_LIST_3(W, (I << 1), V),_INIT_LIST_3(W, ((I << 1) + 1), V)
+#define _INIT_LIST_5(W, I, V...) _INIT_LIST_4(W, (I << 1), V),_INIT_LIST_4(W, ((I << 1) + 1), V)
+#define _INIT_LIST_6(W, I, V...) _INIT_LIST_5(W, (I << 1), V),_INIT_LIST_5(W, ((I << 1) + 1), V)
+#define _INIT_LIST_7(W, I, V...) _INIT_LIST_6(W, (I << 1), V),_INIT_LIST_6(W, ((I << 1) + 1), V)
+#define _INIT_LIST_8(W, I, V...) _INIT_LIST_7(W, (I << 1), V),_INIT_LIST_7(W, ((I << 1) + 1), V)
+#define _INIT_LIST_9(W, I, V...) _INIT_LIST_8(W, (I << 1), V),_INIT_LIST_8(W, ((I << 1) + 1), V)
+#define _INIT_LIST_10(W, I, V...) _INIT_LIST_9(W, (I << 1), V),_INIT_LIST_9(W, ((I << 1) + 1), V)
+#define _INIT_LIST_11(W, I, V...) _INIT_LIST_10(W, (I << 1), V),_INIT_LIST_10(W, ((I << 1) + 1), V)
+#define _INIT_LIST_12(W, I, V...) _INIT_LIST_11(W, (I << 1), V),_INIT_LIST_11(W, ((I << 1) + 1), V)
+#define _INIT_LIST_13(W, I, V...) _INIT_LIST_12(W, (I << 1), V),_INIT_LIST_12(W, ((I << 1) + 1), V)
+#define _INIT_LIST_14(W, I, V...) _INIT_LIST_13(W, (I << 1), V),_INIT_LIST_13(W, ((I << 1) + 1), V)
+#define _INIT_LIST_15(W, I, V...) _INIT_LIST_14(W, (I << 1), V),_INIT_LIST_14(W, ((I << 1) + 1), V)
+
+/* Calls FUNC(index, ARGS) 2^POW2_DEPTH times, and collects
+ * their output sequentially in a comma-separated list
+ * DOES NOT GENERATE BRACES (useful for chaining together)
+ *
+ * Example:
+ * MAKE_INIT_LIST(2, FUNC, ...) ->
+ *    FUNC(0, ...),FUNC(1, ...),FUNC(2, ...),FUNC(3, ...)
+ */
+#define MAKE_INIT_LIST(POW2_DEPTH, FUNC, ARGS...) CAT(_INIT_LIST_,POW2_DEPTH)(FUNC, 0, ARGS)
+
 #endif
