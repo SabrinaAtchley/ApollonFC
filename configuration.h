@@ -110,6 +110,18 @@
 #define PILOT_PITCHANGLE_K    -3.0
 #define PILOT_VERTICALSPEED_K -0.5
 
+/* Number of entries, expressed as an exponent of 2, to include in each lookup
+ * table (LUT) for the response curve profiles. There are currently 6 LUTs, and
+ * each entry is 32 bits (4 bytes).
+ * Default: 6 (2^6 = 64 entries per LUT)
+ *
+ * If you notice your input is feeling step-y, try upping this number, but do be
+ * aware of progmem constraints.
+ *
+ * Range: integer from [1, 15] (32kB is about 2^10 with 6 LUTs of floats)
+ */
+#define PILOT_RESPONSE_CURVE_LUT_SIZE 6 // Default: 6 (64 entries)
+
 
 // Receiver configuration
 

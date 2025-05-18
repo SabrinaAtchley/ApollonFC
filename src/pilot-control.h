@@ -21,17 +21,12 @@
 
 class PilotControl {
 private:
-  static inline double interpolate(
-    const double c1,
-    const double e1,
-    const double e2,
-    const float mid,
-    const uint16_t v
-  );
+  // Takes a raw control value, accesses its LUT, and performs a LERP
+  inline float interpolate(const float* lut, const uint16_t v);
 
 public:
   // Updates drone target state using receiver data
-  static void update(DroneState &state, RECEIVER_T &receiver);
+  void update(DroneState &state, RECEIVER_T &receiver);
 };
 
 #endif /* APOLLON_FC_SRC_PILOT_CONTROL_H */
