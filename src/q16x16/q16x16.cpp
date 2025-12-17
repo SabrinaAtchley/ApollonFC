@@ -385,8 +385,12 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     "movw r22, %[b_high]\n\t" // Load r23:r20 <- b
     "clr r16\n\t"
     "clr r17\n\t"
-    "clt\n\t" // Clear T flag
     "movw r18, r16\n\t" // Clear remainder register r19:r16
+
+    // Compute result sign
+    "mov r30, r27\n\t"
+    "eor r30, r23\n\t"
+    "bst r30, 7\n\t" // T <- a[31] xor b[31]
 
     // Check signs of operands, set T bit, and take Two's complement as needed
     // Check sign of a first, then check if b is zero. If so, jump to overflow_occurred
@@ -403,8 +407,6 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     "com r25\n\t"
     "com r26\n\t"
     "com r27\n\t"
-    // Set T
-    "set\n\t" // Set T bit
     ".a_positive%=:\n\t"
 
     // Check if b is zero
@@ -430,10 +432,6 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     "com r21\n\t"
     "com r22\n\t"
     "com r23\n\t"
-    // Toggle T
-    "bld r30, 0\n\t" // Load R30[0] <- T
-    "inc r30\n\t" // Has the effect of toggling r30[0]
-    "bst r30, 0\n\t"
     ".b_positive%=:\n\t"
 
     // Initialize loop counter
