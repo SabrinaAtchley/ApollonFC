@@ -19,17 +19,17 @@ void unitPilotControl() {
     Serial.print(",flightMode:");
     Serial.print(state.flightMode);
     Serial.print(",throttle:");
-    Serial.print(state.throttle.target);
+    Serial.print(q16x16tof(state.throttle.target));
     Serial.print(",yawSpeed:");
-    Serial.print(state.yawSpeed.target);
+    Serial.print(q16x16tof(state.yawSpeed.target));
     Serial.print(",pitchSpeed:");
-    Serial.print(state.pitchSpeed.target);
+    Serial.print(q16x16tof(state.pitchSpeed.target));
     Serial.print(",rollSpeed:");
-    Serial.print(state.rollSpeed.target);
+    Serial.print(q16x16tof(state.rollSpeed.target));
     Serial.print(",pitchAngle:");
-    Serial.print(state.pitchAngle.target);
+    Serial.print(q16x16tof(state.pitchAngle.target));
     Serial.print(",rollAngle:");
-    Serial.println(state.rollAngle.target);
+    Serial.println(q16x16tof(state.rollAngle.target));
   }
 } /* unitPilotControl */
 

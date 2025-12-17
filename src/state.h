@@ -8,10 +8,11 @@
  */
 
 #include "../configuration.h"
+#include "q16x16/q16x16.h"
 
 struct StateEstimate {
-  float target = 0.0;
-  float estimate = 0.0;
+  Q16x16 target = 0.0;
+  Q16x16 estimate = 0.0;
 };
 
 struct DroneState {

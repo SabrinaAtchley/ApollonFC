@@ -18,11 +18,12 @@
 #include "receivers.h"
 #include "../configuration.h"
 #include "state.h"
+#include "q16x16/q16x16.h"
 
 class PilotControl {
 private:
   // Takes a raw control value, accesses its LUT, and performs a LERP
-  inline float interpolate(const float* lut, const uint16_t v);
+  inline Q16x16 interpolate(const Q16x16* lut, const uint16_t v);
 
 public:
   // Updates drone target state using receiver data

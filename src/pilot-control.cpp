@@ -8,14 +8,14 @@
 #define RESPONSE_CURVE_T(I) (((double) (2 * i)) / ((1 << PILOT_RESPONSE_CURVE_LUT_SIZE) - 1) - 1.0)
 #define GENERATE_LUT_DATA(AXIS) MAKE_INIT_LIST(PILOT_RESPONSE_CURVE_LUT_SIZE, responseCurveLUTValue, CAT(AXIS, _MIN), CAT(AXIS, _MID), CAT(AXIS, _MAX), CAT(AXIS, _K))
 
-static constexpr float responseCurveLUTValue(
+static constexpr Q16x16 responseCurveLUTValue(
   const uint16_t i, // LUT index
   const double min, // minimum output value
   const double mid, // neutral output value
   const double max, // maximum output value
   const double k // neutral response sensitivity gain
 ) {
-  return (float) (
+  return ftoq16x16(
       exp(k) * (pow(
           RESPONSE_CURVE_E1(min, mid, max, exp(k)),
           RESPONSE_CURVE_T(i)
@@ -27,31 +27,42 @@ static constexpr float responseCurveLUTValue(
 }
 
 // Response curve lookup tables
-static constexpr PROGMEM float yawSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_YAWSPEED)};
-static constexpr PROGMEM float rollSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLSPEED)};
-static constexpr PROGMEM float pitchSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHSPEED)};
-static constexpr PROGMEM float rollAngleLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLANGLE)};
-static constexpr PROGMEM float pitchAngleLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHANGLE)};
-static constexpr PROGMEM float verticalSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_VERTICALSPEED)};
+static constexpr PROGMEM Q16x16 yawSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_YAWSPEED)};
+static constexpr PROGMEM Q16x16 rollSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLSPEED)};
+static constexpr PROGMEM Q16x16 pitchSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHSPEED)};
+static constexpr PROGMEM Q16x16 rollAngleLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLANGLE)};
+static constexpr PROGMEM Q16x16 pitchAngleLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHANGLE)};
+static constexpr PROGMEM Q16x16 verticalSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_VERTICALSPEED)};
 
-inline float PilotControl::interpolate(
-    const float* lut,
+inline Q16x16 PilotControl::interpolate(
+    const Q16x16* lut,
     const uint16_t v
   ) {
   const uint16_t entries = (1 << PILOT_RESPONSE_CURVE_LUT_SIZE);
-  const float index = (
-      ((uint32_t)(v - INPUT_MOTOR_MIN))
-    * (entries - 1)
-    / ((float) (INPUT_MOTOR_MAX - INPUT_MOTOR_MIN))
+  // (v - MIN) / (MAX - MIN) * (entries - 1)
+  const Q16x16 index = q16x16_mul_s(
+    itoq16x16(entries - 1),
+    q16x16_div_s(
+      itoq16x16(v - INPUT_MOTOR_MIN),
+      itoq16x16(INPUT_MOTOR_MAX - INPUT_MOTOR_MIN)
+    )
   );
-  const uint16_t i0 = (uint16_t) index; // truncate
+  const uint16_t i0 = index >> 16; // truncate
   const uint16_t i1 = min(i0 + 1, entries - 1);
-  const float frac = index - i0;
+  const Q16x16 frac = q16x16_sub_s(
+    index,
+    itoq16x16(i0)
+  );
+
 
   // LERP between i0 and i1
-  return (pgm_read_float(&lut[i0]) + frac * (
-    pgm_read_float(&lut[i1]) - pgm_read_float(&lut[i0])
-  ));
+  // i0 + frac * (i1 - i0)
+  return q16x16_add_s( pgm_read_q16x16(&lut[i0]),
+    q16x16_mul_s(frac, q16x16_sub_s(
+      pgm_read_q16x16(&lut[i1]),
+      pgm_read_q16x16(&lut[i0])
+    ))
+  );
 }
 
 void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
