@@ -13,6 +13,7 @@
 #include "unit-tests/test-array-queue.h"
 #include "unit-tests/test-pid.h"
 #include "unit-tests/test-pilot-control.h"
+#include "unit-tests/test-q16x16.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -24,8 +25,9 @@
  *  APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
  *  APOLLON_FC_UNIT_TEST_PID
  *  APOLLON_FC_UNIT_TEST_PILOT_CONTROL
+ *  APOLLON_FC_UNIT_TEST_Q16X16
  */
-#define APOLLON_FC_UNIT_TEST_PILOT_CONTROL
+#define APOLLON_FC_UNIT_TEST_Q16X16
 
 
 void setup() {
@@ -51,6 +53,9 @@ void setup() {
   #endif
   #ifdef APOLLON_FC_UNIT_TEST_PILOT_CONTROL
     unitPilotControl();
+  #endif
+  #ifdef APOLLON_FC_UNIT_TEST_Q16X16
+    unitQ16x16();
   #endif
 }
 
