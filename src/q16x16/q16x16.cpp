@@ -468,7 +468,6 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     // Decrement loop counter
     "dec r30\n\t"
     // Jump if not zero
-    "cpi r30, 0\n\t"
     "brne .integer_loop%=\n\t" // Loop 32 times
 
     // Early over/underflow detection
@@ -512,7 +511,6 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     // Decrement loop counter
     "dec r30\n\t"
     // Jump if not zero
-    "cpi r30, 0\n\t"
     "brne .fractional_loop%=\n\t" // Loop 16 times
 
     // Additional overflow detection if necessary
