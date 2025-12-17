@@ -392,21 +392,20 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     "eor r30, r23\n\t"
     "bst r30, 7\n\t" // T <- a[31] xor b[31]
 
-    // Check signs of operands, set T bit, and take Two's complement as needed
+    // Check signs of operands and take Two's complement as needed
     // Check sign of a first, then check if b is zero. If so, jump to overflow_occurred
     // Check sign of a
     "sbrs r27, 7\n\t" // skip if a is negative
     "rjmp .a_positive%=\n\t"
     // Take two's complement
     "clc\n\t" // clear carry
-    "sbci r24, 1\n\t" // a0
-    "sbci r25, 0\n\t" // a1
-    "sbci r26, 0\n\t" // a2
-    "sbci r27, 0\n\t" // a3
     "com r24\n\t"
     "com r25\n\t"
     "com r26\n\t"
     "com r27\n\t"
+    "adiw r24, 1\n\t"
+    "adc r26, r1\n\t" // r1 is zero reg
+    "adc r27, r1\n\t"
     ".a_positive%=:\n\t"
 
     // Check if b is zero
@@ -424,10 +423,10 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     "rjmp .b_positive%=\n\t"
     // Take two's complement
     "clc\n\t" // clear carry
-    "sbci r20, 1\n\t" // b0
-    "sbci r21, 0\n\t" // b1
-    "sbci r22, 0\n\t" // b2
-    "sbci r23, 0\n\t" // b3
+    "sbci r20, 1\n\t"
+    "sbci r21, 0\n\t"
+    "sbci r22, 0\n\t"
+    "sbci r23, 0\n\t"
     "com r20\n\t"
     "com r21\n\t"
     "com r22\n\t"
@@ -511,22 +510,19 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     // Jump if not zero
     "brne .fractional_loop%=\n\t" // Loop 16 times
 
-    // Additional overflow detection if necessary
-
     // Our unsigned result is now in r27:r24
 
     // Check sign, assuming no overflow
     // Check if result should be negative
-    "brtc .return_result%=\n\t" // Skip if result is positive
+    "brtc .return_result%=\n\t" // Jump if result is positive
     "clc\n\t" // clear carry
-    "sbci r24, 1\n\t"
-    "sbci r25, 0\n\t"
-    "sbci r26, 0\n\t"
-    "sbci r27, 0\n\t"
     "com r24\n\t"
     "com r25\n\t"
     "com r26\n\t"
     "com r27\n\t"
+    "adiw r24, 1\n\t"
+    "adc r26, r1\n\t"
+    "adc r27, r1\n\t"
     "rjmp .return_result%=\n\t"
 
 
