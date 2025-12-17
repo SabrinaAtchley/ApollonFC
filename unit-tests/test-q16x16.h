@@ -160,6 +160,12 @@ void unitQ16x16() {
       TEST_CASE(4.24, q16x16_div_s(1, 0x7FFF0000) == 0);                  // ~1/32767 -> 0
       TEST_CASE(4.25, q16x16_div_s(-1, 0x7FFF0000) == 0);                 // ~-1/32767 -> 0 (trunc toward 0)
     }); /* Safe Division */
+
+    TEST_SECTION(Float to Q16x16, {
+      TEST_CASE(5.1, ftoq16x16(2.5) == 163840);
+      TEST_CASE(5.2, ftoq16x16(3.14159265) == 0x0003243F);
+      TEST_CASE(5.3, ftoq16x16(-2.5) == 0xFFFD8000);
+    }); /* Float to Q16x16 */
   }); /* Q16x16 */
 }
 
