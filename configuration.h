@@ -63,12 +63,12 @@
 */
 
 // °/s
-#define PILOT_YAWSPEED_MIN    -750.0
-#define PILOT_YAWSPEED_MAX     750.0
-#define PILOT_ROLLSPEED_MIN   -750.0
-#define PILOT_ROLLSPEED_MAX    750.0
-#define PILOT_PITCHSPEED_MIN  -750.0
-#define PILOT_PITCHSPEED_MAX   750.0
+#define PILOT_YAWSPEED_MIN    -200.0
+#define PILOT_YAWSPEED_MAX     200.0
+#define PILOT_ROLLSPEED_MIN   -300.0
+#define PILOT_ROLLSPEED_MAX    300.0
+#define PILOT_PITCHSPEED_MIN  -300.0
+#define PILOT_PITCHSPEED_MAX   300.0
 // °
 // There is no yaw angle limit, why is left as an exercise to the reader.
 #define PILOT_ROLLANGLE_MIN    -10.0
@@ -76,8 +76,8 @@
 #define PILOT_PITCHANGLE_MIN   -10.0
 #define PILOT_PITCHANGLE_MAX    10.0
 // m/s
-#define PILOT_VERTICALSPEED_MIN   -5.0
-#define PILOT_VERTICALSPEED_MAX   20.0
+#define PILOT_VERTICALSPEED_MIN   -2.0
+#define PILOT_VERTICALSPEED_MAX   10.0
 /* Midpoint values. These are the output values for when the sticks are in
  * the neutral position. You almost certainly want these to be kept at 0.
  */
