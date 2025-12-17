@@ -535,20 +535,19 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
     ".overflow_occurred%=:\n\t"
     // Overflow occured, check sign
     "brts .clamp_min%=\n\t" // Clamp min if sign(T) is set
-    "rjmp .clamp_max%=\n\t"
-
-    ".clamp_min%=:\n\t"
-    "ldi r27, 0x80\n\t"
-    "clr r26\n\t"
-    "clr r25\n\t"
-    "clr r24\n\t"
-    "rjmp .return_result%=\n\t"
 
     ".clamp_max%=:\n\t"
     "ldi r27, 0x7F\n\t"
     "ser r26\n\t"
     "ser r25\n\t"
-    "ser r24\n\t" // Fall through to return result
+    "ser r24\n\t"
+    "rjmp .return_result%=\n\t"
+
+    ".clamp_min%=:\n\t"
+    "ldi r27, 0x80\n\t"
+    "clr r26\n\t"
+    "clr r25\n\t"
+    "clr r24\n\t" // Fall through to return result
 
     ".return_result%=:\n\t"
     "movw %[result_low], r24\n\t"
