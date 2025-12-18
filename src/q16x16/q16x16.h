@@ -21,6 +21,8 @@ Q16x16 q16x16_sub_s(const Q16x16, const Q16x16);
 Q16x16 q16x16_mul_s(const Q16x16, const Q16x16);
 Q16x16 q16x16_div_s(const Q16x16, const Q16x16);
 
+Q16x16 q16x16_invsqrt(const Q16x16);
+
 static constexpr Q16x16 ftoq16x16(const float x) {
   return (int32_t) (x * 65536);
 }

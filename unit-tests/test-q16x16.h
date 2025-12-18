@@ -9,6 +9,14 @@ namespace {
   Q16x16 i2q(Q16x16 const a) {
     return (int32_t) a << 16;
   }
+
+  bool testInvSqrt(const float a) {
+    Q16x16 absErr = abs(q16x16_sub_s(
+      q16x16_invsqrt(ftoq16x16(a)),
+      ftoq16x16(1 / sqrt(a))
+    ));
+    return q16x16_div_s(absErr, ftoq16x16(1 / sqrt(a))) <= ftoq16x16(0.01);
+  }
 }
 
 void unitQ16x16() {
@@ -166,6 +174,15 @@ void unitQ16x16() {
       TEST_CASE(5.2, ftoq16x16(3.14159265) == 0x0003243F);
       TEST_CASE(5.3, ftoq16x16(-2.5) == 0xFFFD8000);
     }); /* Float to Q16x16 */
+
+    TEST_SECTION(Inverse Square Root, {
+      TEST_CASE(6.1, testInvSqrt(3.9));
+      TEST_CASE(6.2, testInvSqrt(2.5));
+      TEST_CASE(6.3, testInvSqrt(27.6));
+      TEST_CASE(6.4, testInvSqrt(0.005));
+      TEST_CASE(6.5, testInvSqrt(0.2));
+      TEST_CASE(6.6, testInvSqrt(1.5));
+    });
   }); /* Q16x16 */
 }
 

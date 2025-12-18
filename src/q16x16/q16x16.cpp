@@ -562,3 +562,39 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
 
   return wordPairToQ16x16(result);
 }
+
+Q16x16 q16x16_invsqrt(const Q16x16 a) {
+  if (a <= 0) { return 0; }
+
+  // range reduce x to be close to 1
+  int8_t power = 0;
+  Q16x16 x = a;
+  while (x >= itoq16x16(2)) {
+    x >>= 2;
+    power++;
+  }
+  while (x < itoq16x16(1) >> 1) {
+    x <<= 2;
+    power--;
+  }
+
+  // x should now be within (0.25, 4)
+  const Q16x16 threehalfs = 0x00018000; // 1.5
+  Q16x16 y = 0x00010000; // 1.0
+
+  for (uint8_t i = 0; i < 2; i++) {
+    Q16x16 y2 = q16x16_mul_s(y, y);
+    Q16x16 xy2 = q16x16_mul_s(x, y2);
+    Q16x16 term = q16x16_sub_s(threehalfs, xy2 >> 1);
+    y = q16x16_mul_s(y, term);
+  }
+
+  // reverse range reduction
+  if (power > 0) {
+    y >>= power;
+  } else if (power < 0) {
+    y <<= (-power);
+  }
+
+  return y;
+}
