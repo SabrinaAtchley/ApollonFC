@@ -183,6 +183,13 @@ void unitQ16x16() {
       TEST_CASE(6.5, testInvSqrt(0.2));
       TEST_CASE(6.6, testInvSqrt(1.5));
     });
+
+    TEST_SECTION(Negate, {
+      TEST_CASE(7.1, q16x16_negate(0) == 0);
+      TEST_CASE(7.2, q16x16_negate(q16x16_min) == q16x16_max);
+      TEST_CASE(7.3, q16x16_negate(q16x16_max) == 0x80000001);
+      TEST_CASE(7.4, q16x16_negate(0x00010000) == 0xFFFF0000);
+    });
   }); /* Q16x16 */
 }
 

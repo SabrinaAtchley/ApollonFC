@@ -563,6 +563,54 @@ Q16x16 q16x16_div_s(const Q16x16 a, const Q16x16 b) {
   return wordPairToQ16x16(result);
 }
 
+Q16x16 q16x16_negate(const Q16x16 a) {
+  uint16_t result[2];
+
+  __asm__ volatile (
+    "movw r24, %[a_low]\n\t"
+    "movw r26, %[a_high]\n\t"
+
+    // Check if a is MIN, if so return MAX
+    "ldi r30, 0x80\n\t"
+    "cp r27, r30\n\t"
+    "cpc r26, r1\n\t"
+    "cpc r25, r1\n\t"
+    "cpc r24, r1\n\t"
+    "brne .negate%=\n\t"
+
+    // return MAX if input is MIN
+    "ldi r27, 0x7F\n\t"
+    "ldi r26, 0xFF\n\t"
+    "ldi r25, 0xFF\n\t"
+    "ldi r24, 0xFF\n\t"
+    "rjmp .return_result%=\n\t"
+
+    // take two's complement
+    ".negate%=:\n\t"
+    "com r24\n\t"
+    "com r25\n\t"
+    "com r26\n\t"
+    "com r27\n\t"
+    "adiw r24, 0x01\n\t"
+    "adc r26, r1\n\t"
+    "adc r27, r1\n\t"
+
+    ".return_result%=:\n\t"
+    "movw %[result_low], r24\n\t"
+    "movw %[result_high], r26\n\t"
+
+  : [result_low] "=r" ( result[0] ),
+    [result_high] "=r" ( result[1] )
+  : [a_low] "r" ( (uint16_t) (a & 0xFFFF) ),
+    [a_high] "r" ( (uint16_t) (a >> 16) )
+  : "r24", "r25", "r26", "r27", // a / result
+    "r30", // scratch
+    "cc"
+  );
+
+  return wordPairToQ16x16(result);
+}
+
 Q16x16 q16x16_invsqrt(const Q16x16 a) {
   if (a <= 0) { return 0; }
 
