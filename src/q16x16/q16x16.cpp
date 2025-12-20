@@ -571,18 +571,21 @@ Q16x16 q16x16_negate(const Q16x16 a) {
     "movw r26, %[a_high]\n\t"
 
     // Check if a is MIN, if so return MAX
-    "ldi r30, 0x80\n\t"
-    "cp r27, r30\n\t"
-    "cpc r26, r1\n\t"
-    "cpc r25, r1\n\t"
-    "cpc r24, r1\n\t"
+    // Uses short circuit to minimize best-case and average execution time
+    "cpi r27, 0x80\n\t"
+    "brne .negate%=\n\t"
+    "tst r26\n\t"
+    "brne .negate%=\n\t"
+    "tst r25\n\t"
+    "brne .negate%=\n\t"
+    "tst r24\n\t"
     "brne .negate%=\n\t"
 
     // return MAX if input is MIN
     "ldi r27, 0x7F\n\t"
-    "ldi r26, 0xFF\n\t"
-    "ldi r25, 0xFF\n\t"
-    "ldi r24, 0xFF\n\t"
+    "ser r26\n\t"
+    "ser r25\n\t"
+    "ser r24\n\t"
     "rjmp .return_result%=\n\t"
 
     // take two's complement
@@ -604,7 +607,6 @@ Q16x16 q16x16_negate(const Q16x16 a) {
   : [a_low] "r" ( (uint16_t) (a & 0xFFFF) ),
     [a_high] "r" ( (uint16_t) (a >> 16) )
   : "r24", "r25", "r26", "r27", // a / result
-    "r30", // scratch
     "cc"
   );
 
