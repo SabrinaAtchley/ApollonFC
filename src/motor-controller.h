@@ -8,6 +8,7 @@
 #include "pid.h"
 #include "state.h"
 #include "vector8.h"
+#include "q16x16/q16x16.h"
 
 /* Motor mixing module
  *
@@ -23,8 +24,8 @@ private:
   PID pidYaw;
   PID pidPitch;
   PID pidRoll;
-  float control[4]; // yaw, pitch, roll, throttle
-  static constexpr float mixingMatrix[MOTOR_AMOUNT][4] = MOTOR_MIXING_MATRIX;
+  Q16x16 control[4]; // yaw, pitch, roll, throttle
+  Q16x16 mixingMatrix[MOTOR_AMOUNT][4] = MOTOR_MIXING_MATRIX;
 
 public:
   MotorController();

@@ -21,8 +21,8 @@ public:
     temperature = 20.0;
   }
 
-  void setDutyCycle(const float duty) {
-    dutyCycle = CLAMP(duty, 0, 100) / 100;;
+  void setDutyCycle(const Q16x16 duty) {
+    dutyCycle = CLAMP(q16x16tof(duty), 0, 100) / 100;;
   }
 
   void update(const unsigned long deltaT) {
@@ -33,12 +33,13 @@ public:
 };
 
 void unitPID() {
-  float u = 0.0, setPoint = 30.0;
-  float kp = 8.0, ki = 0.5, kd = 16.0;
-  static constexpr float iMin = -4, iMax = 4;
-  static constexpr float pScale = 10, iScale = 1, dScale = 10;
+  Q16x16 u = 0, setPoint = ftoq16x16(30.0);
+  const Q16x16 kp = ftoq16x16(8.0), ki = ftoq16x16(2.0), kd = ftoq16x16(16.0),
+              alpha = ftoq16x16(0.5);
+  static constexpr Q16x16 iMin = -itoq16x16(4), iMax = itoq16x16(4);
+  static constexpr Q16x16 pScale = itoq16x16(10), iScale = itoq16x16(1), dScale = itoq16x16(10);
 
-  PID pid(kp, ki, kd, pScale, iScale, dScale, iMin, iMax);
+  PID pid(kp, ki, kd, pScale, iScale, dScale, iMin, iMax, alpha);
   HeaterSimulation heater;
   unsigned long previousTime = millis(), currentTime, deltaT;
 
@@ -49,30 +50,31 @@ void unitPID() {
     previousTime = currentTime;
 
     // Print setpoint and control variable
-    u = pid.update(setPoint, heater.temperature, deltaT);
+    u = pid.update(setPoint, ftoq16x16(heater.temperature), deltaT);
     heater.setDutyCycle(u);
     heater.update(deltaT);
 
     Serial.print("setPoint:");
-    Serial.print(setPoint);
+    Serial.print(q16x16tof(setPoint));
     Serial.print(",control:");
-    Serial.print(u);
+    Serial.print(q16x16tof(u));
     Serial.print(",process:");
     Serial.print(heater.temperature);
     Serial.print(",error:");
-    Serial.print(setPoint - heater.temperature);
+    Serial.print(q16x16tof(setPoint) - heater.temperature);
     Serial.print(",p:");
-    Serial.print(pid.getLastPTerm());
+    Serial.print(q16x16tof(pid.getLastPTerm()));
     Serial.print(",i:");
-    Serial.print(pid.getLastITerm());
+    Serial.print(q16x16tof(pid.getLastITerm()));
     Serial.print(",d:");
-    Serial.println(pid.getLastDTerm());
+    Serial.println(q16x16tof(pid.getLastDTerm()));
 
     // Check for user commands
     if (Serial.available()) {
       String input = Serial.readString();
       input.trim();
 
+      /*
       if (input.startsWith("kp ")) {
         kp = input.substring(3).toFloat();
         pid.setCoefficients(kp, ki, kd);
@@ -84,9 +86,10 @@ void unitPID() {
       } else if (input.startsWith("kd ")) {
         kd = input.substring(3).toFloat();
         pid.setCoefficients(kp, ki, kd);
+      */
 
-      } else if (input.startsWith("set ")) {
-        setPoint = input.substring(4).toFloat();
+      if (input.startsWith("set ")) {
+        setPoint = ftoq16x16(input.substring(4).toFloat());
 
       } else if (input.startsWith("reset")) {
         u = 0.0;

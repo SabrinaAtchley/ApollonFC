@@ -1,69 +1,95 @@
 #include "pid.h"
 
 PID::PID(
-  const float _kp, const float _ki, const float _kd,
-  const float _pScale, const float _iScale, const float _dScale,
-  const float _iMin, const float _iMax
+  const Q16x16 _kp, const Q16x16 _ki, const Q16x16 _kd,
+  const Q16x16 _pScale, const Q16x16 _iScale, const Q16x16 _dScale,
+  const Q16x16 _iMin, const Q16x16 _iMax, const Q16x16 _alpha
 ) : kp(_kp), ki(_ki), kd(_kd),
     pScale(_pScale), iScale(_iScale), dScale(_dScale),
-    iMin(_iMin), iMax(_iMax) {}
+    iMin(_iMin), iMax(_iMax),
+    alpha(_alpha), beta(q16x16_sub_s(itoq16x16(1), _alpha)),
+    pGain(q16x16_mul_s(_kp, _pScale)), // pGain = kp * pScale
+    iGain(q16x16_mul_s(_ki, _iScale)),
+    dGain(q16x16_mul_s( // -kd * dScale * (alpha / beta)
+      q16x16_mul_s(-_kd, _dScale),
+      q16x16_div_s(_alpha, beta)
+    )),
+    outputMin(ftoq16x16(PID_OUTPUT_RANGE_MIN)),
+    outputMax(ftoq16x16(PID_OUTPUT_RANGE_MAX)) {}
 
-void PID::setCoefficients(
-  const float newKp, const float newKi, const float newKd
-) {
-  kp = newKp;
-  ki = newKi;
-  kd = newKd;
+const Q16x16 PID::getLastPTerm() const {
+  return proportional;
 }
 
-void PID::setIntegralBounds(const float newIMin, const float newIMax) {
-  iMin = newIMin;
-  iMax = newIMax;
+const Q16x16 PID::getLastITerm() const {
+  return integral;
 }
 
-const float PID::update(const float setPoint, const float value, const unsigned long deltaT) {
-  const float error = setPoint - value;
-  proportional = kp * pScale * error;
+const Q16x16 PID::getLastDTerm() const {
+  return derivative;
+}
+
+Q16x16 PID::update(const Q16x16 setPoint, const Q16x16 value, const Q16x16 deltaT) {
+  const Q16x16 error = q16x16_sub_s(setPoint, value);
+
+  // Serial.print("error:");
+  // Serial.print(error);
+  // Serial.print(", pGain:");
+  // Serial.print(pGain);
+  // Serial.print(", p:");
+
+  proportional = q16x16_mul_s(error, pGain);
+  // Serial.println(q16x16tof(proportional));
 
   /* Integral
    * For simplicity and to save clock cycles, we will use a trapezoidal method for now
    * Consider revisiting with a fourth-order Runge-Kutta if more accuracy is needed
    */
-  integralSum += (previousError + error) * deltaT / 2;
-  integralSum = CLAMP(integralSum, iMin / ki / iScale, iMax / ki / iScale);
-  integral = ki * iScale * integralSum;
+  // NOTE: It could be worth rewriting this using 64-bit math to minimize the deadband
+  //       near error = 0
+  // integral += iGain * (previousError + error) * deltaT / 2
+  integral = q16x16_add_s(integral,
+    q16x16_mul_s(iGain,
+      q16x16_mul_s(
+        q16x16_add_s(previousError, error),
+        deltaT
+      )
+    ) >> 1
+  );
+  integral = CLAMP(integral, iMin, iMax);
 
   /* Derivative
    * Uses Brown's Linear Exponential Smoothing to estimate the derivative
    * Estimates the derivative of the process variable instead of the derivative
    * of the error, to help combat derivative kick
    */
-  if (s1 == 0.0 && s2 == 0.0) {
-    s1 = value;
-    s2 = value;
-    derivative = 0.0;
-  }  else {
-    s1 = alpha * value + (1 - alpha) * s1;
-    s2 = alpha * s1 + (1 - alpha) * s2;
-    derivative = -kd * dScale * (s1 - s2) / (1 - alpha) * alpha;
-  }
 
-  previousError = error;
-  return CLAMP(
-    proportional + integral + derivative,
-    PID_OUTPUT_RANGE_MIN,
-    PID_OUTPUT_RANGE_MAX
-  );
-}
+   if (!dInit) {
+     dInit = true;
+     s1 = value;
+     s2 = value;
+     derivative = 0;
+   } else {
+     // alpha * value + beta * s1
+     s1 = q16x16_add_s(
+       q16x16_mul_s(alpha, value),
+       q16x16_mul_s(beta, s1)
+     );
+     // alpha * s1 + beta * s2
+     s2 = q16x16_add_s(
+       q16x16_mul_s(alpha, s1),
+       q16x16_mul_s(beta, s2)
+     );
+     // dGain * (s1 - s2)
+     derivative = q16x16_mul_s(dGain,
+       q16x16_sub_s(s1, s2)
+     );
+   }
 
-const float PID::getLastPTerm() const {
-  return proportional;
-}
-
-const float PID::getLastITerm() const {
-  return integral;
-}
-
-const float PID::getLastDTerm() const {
-  return derivative;
+   previousError = error;
+   return CLAMP(
+     q16x16_add_s(proportional, q16x16_add_s(integral, derivative)),
+     outputMin,
+     outputMax
+   );
 }
