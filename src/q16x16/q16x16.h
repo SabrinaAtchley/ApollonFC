@@ -20,6 +20,7 @@ Q16x16 q16x16_sub_s(const Q16x16, const Q16x16);
 // Multiplies two Q16.16 numbers and performs overflow clamping
 Q16x16 q16x16_mul_s(const Q16x16, const Q16x16);
 Q16x16 q16x16_div_s(const Q16x16, const Q16x16);
+Q16x16 q16x16_double_s(const Q16x16);
 
 Q16x16 q16x16_invsqrt(const Q16x16);
 Q16x16 q16x16_square_s(const Q16x16);

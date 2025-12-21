@@ -652,3 +652,7 @@ Q16x16 q16x16_invsqrt(const Q16x16 a) {
 Q16x16 q16x16_square_s(const Q16x16 a) {
   return q16x16_mul_s(a, a);
 }
+
+Q16x16 q16x16_double_s(const Q16x16 a) {
+  return q16x16_add_s(a, a);
+}
