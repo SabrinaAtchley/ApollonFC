@@ -68,6 +68,15 @@ Quaternion& Quaternion::normalize() {
   return *this;
 }
 
+Quaternion& Quaternion::scale(const Q16x16 s) {
+  w = q16x16_mul_s(w, s);
+  x = q16x16_mul_s(x, s);
+  y = q16x16_mul_s(y, s);
+  z = q16x16_mul_s(z, s);
+
+  return *this;
+}
+
 Quaternion& Quaternion::operator*=(const Quaternion &q) {
   Q16x16 pw, px, py, pz;
   // pw*qw - px*qx - py*qy - pz*qz

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "q16x16/q16x16.h"
+#include "../configuration.h"
 
 class Quaternion {
 public:
@@ -17,6 +18,7 @@ public:
   Quaternion& matchHemisphere(const Quaternion&);
   Quaternion& conjugate();
   Quaternion& normalize();
+  Quaternion& scale(const Q16x16);
   Quaternion& operator*=(const Quaternion&);
   Quaternion& operator+=(const Quaternion&);
   Quaternion& operator-=(const Quaternion&);
