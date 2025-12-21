@@ -2,8 +2,7 @@
 #define APOLLON_FC_UNIT_TESTS_H
 
 /* Handles Unit testing of all modules and other units
- * Run as a single suite of tests
- *
+ * Runs as a single unit at a time to save progmem
  */
 
 #include "unit-tests/test-vector8.h"
@@ -14,6 +13,7 @@
 #include "unit-tests/test-pid.h"
 #include "unit-tests/test-pilot-control.h"
 #include "unit-tests/test-q16x16.h"
+#include "unit-tests/test-quaternion.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -26,8 +26,9 @@
  *  APOLLON_FC_UNIT_TEST_PID
  *  APOLLON_FC_UNIT_TEST_PILOT_CONTROL
  *  APOLLON_FC_UNIT_TEST_Q16X16
+ *  APOLLON_FC_UNIT_TEST_QUATERNION
  */
-#define APOLLON_FC_UNIT_TEST_Q16X16
+#define APOLLON_FC_UNIT_TEST_QUATERNION
 
 
 void setup() {
@@ -56,6 +57,9 @@ void setup() {
   #endif
   #ifdef APOLLON_FC_UNIT_TEST_Q16X16
     unitQ16x16();
+  #endif
+  #ifdef APOLLON_FC_UNIT_TEST_QUATERNION
+    unitQuaternion();
   #endif
 }
 
