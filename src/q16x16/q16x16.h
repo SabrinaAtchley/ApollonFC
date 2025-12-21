@@ -22,6 +22,7 @@ Q16x16 q16x16_mul_s(const Q16x16, const Q16x16);
 Q16x16 q16x16_div_s(const Q16x16, const Q16x16);
 
 Q16x16 q16x16_invsqrt(const Q16x16);
+Q16x16 q16x16_square_s(const Q16x16);
 Q16x16 q16x16_negate(const Q16x16); // Equivalent to q16x16_sub_s(0, x), but faster
 
 static constexpr Q16x16 ftoq16x16(const float x) {
