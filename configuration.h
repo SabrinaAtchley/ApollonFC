@@ -216,10 +216,10 @@
 #define DRONE_CONFIGURATION QUAD_X
 
 /* Motor mixing matrices
- * row 1 - contribution of motor 1 to yaw, pitch, roll, throttle
- * row 2 - contribution of motor 2 to yaw, pitch, roll, throttle
- * row 3 - contribution of motor 3 to yaw, pitch, roll, throttle
- * row 4 - contribution of motor 4 to yaw, pitch, roll, throttle
+ * row 1 - contribution of motor 1 to throttle, roll, pitch, yaw
+ * row 2 - contribution of motor 2 to throttle, roll, pitch, yaw
+ * row 3 - contribution of motor 3 to throttle, roll, pitch, yaw
+ * row 4 - contribution of motor 4 to throttle, roll, pitch, yaw
  * and so on for higher rotor counts
  */
 #define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0,  1.0,  1.0}, \
