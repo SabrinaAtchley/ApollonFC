@@ -58,7 +58,7 @@ Need "mode" state variable, one byte should be enough.
 
 
 # Notes/Reminders
-- Consider revisting receivers.h and changing it to a zero-overhead abstraction
+- Consider revisiting receivers.h and changing it to a zero-overhead abstraction
 - ~~Was working on Vector16, which will be used for the matrix equation in the motor control module. The PIDs will output one Vector16.~~
 - ~~Was working on unit tests for Vector16, added in Serial message for Buzzer errors.~~
 
