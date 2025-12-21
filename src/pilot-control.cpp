@@ -96,6 +96,7 @@ void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
 
   switch(state.flightMode) {
     case FLIGHT_MODE_ANGLE:
+      // TODO: This should likely take the raw PWM output as the "Base" throttle
       state.throttle.target = interpolate(
         verticalSpeedLUT,
         receiver.getChannel(INPUT_CHANNEL_THROTTLE)
