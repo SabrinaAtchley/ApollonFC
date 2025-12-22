@@ -14,6 +14,7 @@
 #include "unit-tests/test-pilot-control.h"
 #include "unit-tests/test-q16x16.h"
 #include "unit-tests/test-quaternion.h"
+#include "unit-tests/test-madgwick.h"
 
 /* Flag(s) for which tests should be run (running all at once can run
  * into program memory issues on low-memory boards such as the Arduino Uno)
@@ -27,8 +28,9 @@
  *  APOLLON_FC_UNIT_TEST_PILOT_CONTROL
  *  APOLLON_FC_UNIT_TEST_Q16X16
  *  APOLLON_FC_UNIT_TEST_QUATERNION
+ *  APOLLON_FC_UNIT_TEST_MADGWICK
  */
-#define APOLLON_FC_UNIT_TEST_QUATERNION
+#define APOLLON_FC_UNIT_TEST_MADGWICK
 
 
 void setup() {
@@ -60,6 +62,9 @@ void setup() {
   #endif
   #ifdef APOLLON_FC_UNIT_TEST_QUATERNION
     unitQuaternion();
+  #endif
+  #ifdef APOLLON_FC_UNIT_TEST_MADGWICK
+    unitMadgwick();
   #endif
 }
 
