@@ -295,5 +295,18 @@
  #define PID_PITCH_INTEGRAL_LIMITS    ARG_LIST(-5, 5)
  #define PID_ROLL_INTEGRAL_LIMITS     ARG_LIST(-5, 5)
 
+ /* Madgwick filter configuration
+  * ACCEL_GATE_LOW: low value in g's to accept accelerometer data. Lower values
+  *   may produce filter inaccuracies during maneuvers
+  * ACCEL_GATE_HIGH: high value in g's to accept accelerometer data. Higher values
+  *  may produce filter inaccuracies during maneuvers
+  */
+
+  #define ACCEL_GATE_LOW 0.75
+  #define ACCEL_GATE_HIGH 1.25
+
+  // Madgwick tuning parameter — typically ~ sqrt(3/4) * gyro noise (in rad/s)
+  #define MADGWICK_BETA 0.5
+
 
 #endif
