@@ -9,37 +9,41 @@
 void unitMadgwick() {
   Sensor_MPU6050 imu(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
   unsigned long t = micros();
-
-  const Q16x16 deltaT = ftoq16x16(2.5 / 1000.0);
-  // Serial.print("deltaT: ");
-  // Serial.println(deltaT);
+  float deltaT;
 
   Quaternion q;
 
   while (true) {
-    if (micros() - t >= 2500) {
-      t += 2500;
       while(!imu.update()) {}
+      deltaT = (micros() - t) / 1000000.0;
+      t = micros();
 
       // Convert accel measurements from 0.001g to g
       const Q16x16 thousand = itoq16x16(1000);
       Q16x16 ax, ay, az;
-      Q16x16 gx, gy, gz;
+      float gx, gy, gz;
       ax = q16x16_div_s(itoq16x16(imu.accel.x), thousand);
       ay = q16x16_div_s(itoq16x16(imu.accel.y), thousand);
       az = q16x16_div_s(itoq16x16(imu.accel.z), thousand);
 
       // Convert gyro measurements from 0.001°/s to rad/s
-      const Q16x16 millidegToRad = ftoq16x16(3.14159265 / 180.0 / 1000.0);
-      gx = q16x16_mul_s(itoq16x16(imu.gyro.x), millidegToRad);
-      gy = q16x16_mul_s(itoq16x16(imu.gyro.y), millidegToRad);
-      gz = q16x16_mul_s(itoq16x16(imu.gyro.z), millidegToRad);
+      const float millidegToRad = 3.14159265 / 180.0 / 1000.0;
+      // gx = q16x16_mul_s(itoq16x16(imu.gyro.x), millidegToRad);
+      // gy = q16x16_mul_s(itoq16x16(imu.gyro.y), millidegToRad);
+      // gz = q16x16_mul_s(itoq16x16(imu.gyro.z), millidegToRad);
+
+      gx = imu.gyro.x * millidegToRad;
+      gy = imu.gyro.y * millidegToRad;
+      gz = imu.gyro.z * millidegToRad;
 
       q = madgwickUpdate(q,
-        gx, gy, gz,
+        ftoq16x16(gx), ftoq16x16(gy), ftoq16x16(gz),
         ax, ay, az,
-        deltaT
+        ftoq16x16(deltaT)
       );
+      Serial.print("deltaT:");
+      Serial.print(deltaT * 1000);
+      Serial.print(",");
 
       float w, x, y, z;
       w = q16x16tof(q.w);
@@ -70,7 +74,6 @@ void unitMadgwick() {
       // Serial.print(", ");
 
     }
-  }
 }
 
 #endif /* APOLLON_FC_UNIT_TESTS_TEST_MADGWICK_H */
