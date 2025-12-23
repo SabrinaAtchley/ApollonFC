@@ -20,30 +20,21 @@ void unitMadgwick() {
 
       // Convert accel measurements from 0.001g to g
       const Q16x16 thousand = itoq16x16(1000);
-      Q16x16 ax, ay, az;
-      float gx, gy, gz;
-      ax = q16x16_div_s(itoq16x16(imu.accel.x), thousand);
-      ay = q16x16_div_s(itoq16x16(imu.accel.y), thousand);
-      az = q16x16_div_s(itoq16x16(imu.accel.z), thousand);
+      Q16x16 ax = q16x16_div_s(itoq16x16(imu.accel.x), thousand);
+      Q16x16 ay = q16x16_div_s(itoq16x16(imu.accel.y), thousand);
+      Q16x16 az = q16x16_div_s(itoq16x16(imu.accel.z), thousand);
 
       // Convert gyro measurements from 0.001°/s to rad/s
-      const float millidegToRad = 3.14159265 / 180.0 / 1000.0;
-      // gx = q16x16_mul_s(itoq16x16(imu.gyro.x), millidegToRad);
-      // gy = q16x16_mul_s(itoq16x16(imu.gyro.y), millidegToRad);
-      // gz = q16x16_mul_s(itoq16x16(imu.gyro.z), millidegToRad);
-
-      gx = imu.gyro.x * millidegToRad;
-      gy = imu.gyro.y * millidegToRad;
-      gz = imu.gyro.z * millidegToRad;
+      const int64_t k_q30 = 18739; // π / 180 / 1000 in Q2.30
+      Q16x16 gx = ((int64_t) imu.gyro.x * k_q30) >> 14; // 30 - 16 = 14
+      Q16x16 gy = ((int64_t) imu.gyro.y * k_q30) >> 14;
+      Q16x16 gz = ((int64_t) imu.gyro.z * k_q30) >> 14;
 
       q = madgwickUpdate(q,
-        ftoq16x16(gx), ftoq16x16(gy), ftoq16x16(gz),
+        gx, gy, gz,
         ax, ay, az,
         ftoq16x16(deltaT)
       );
-      Serial.print("deltaT:");
-      Serial.print(deltaT * 1000);
-      Serial.print(",");
 
       float w, x, y, z;
       w = q16x16tof(q.w);
@@ -55,23 +46,15 @@ void unitMadgwick() {
       float pitch = asin(2 * (w*y - z*x));
       float yaw = atan2(2 * (w*z + x*y), 1 - 2 * (y*y + z*z));
 
-      PRINT_QUAT(q);
+      // PRINT_QUAT(q);
 
-      /*
-      Serial.print("roll: ");
+
+      Serial.print("roll:");
       Serial.print(roll * 180 / 3.14159265);
-      Serial.print(", pitch: ");
+      Serial.print(",pitch:");
       Serial.print(pitch * 180 / 3.14159265);
-      Serial.print(", yaw: ");
+      Serial.print(",yaw:");
       Serial.println(yaw * 180 / 3.14159265);
-      */
-
-
-      // Serial.print(gx);
-      // Serial.print(", ");
-      // Serial.print(gy);
-      // Serial.println(gz);
-      // Serial.print(", ");
 
     }
 }
