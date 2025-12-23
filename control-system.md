@@ -11,7 +11,7 @@ Need "mode" state variable, one byte should be enough.
 ### Sensor Module
 
 - Get sensor data
-- Estimate craft state - Difficult, requires Kalman filter
+- Estimate craft state - Difficult, requires Madgwick filter
 
 ### Flight Mode Module
 
@@ -63,16 +63,17 @@ Need "mode" state variable, one byte should be enough.
 - ~~Was working on unit tests for Vector16, added in Serial message for Buzzer errors.~~
 
 
-# Rough Timeline - Test Flights by July 2024
+# Rough Timeline - Test Flights by ~~July 2024~~
+Test flights postponed. ETA pending.
 
-- Ideally, I would like to be doing test flights during July 2024.
+- Ideally, I would like to be doing test flights during ~~July 2024~~.
 - Remaining modules:
-  1. Motor control module - mixes PID outputs though the motor matrix to generate signals to send to motors
+  1. ~~Motor control module - mixes PID outputs though the motor matrix to generate signals to send to motors~~
   2. ~~PID class~~
-  3. Sensor fusion module
+  3. ~~Sensor fusion module~~
   4. Main module, including sensor initialization
 
-|              May         |                                 June |                    July |
+|              May         |                                 June |                     ??? |
 | :----------------------- | :----------------------------------- | :---------------------- |
-| ~~PID class~~            | Sensor fusion module (Kalman filter) | Test Flights and tuning |
+| ~~PID class~~            | ~~Sensor fusion module (Madgwick filter)~~ | Test Flights and tuning |
 | ~~Motor control module~~ | Main module                          |                         |
