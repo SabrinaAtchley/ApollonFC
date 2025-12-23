@@ -1,2 +1,4 @@
 .*
 !/.gitignore
+kalman-filter.md
+kalman-filter.pdf
