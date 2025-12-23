@@ -306,7 +306,7 @@
   #define ACCEL_GATE_HIGH 1.25
 
   // Madgwick tuning parameter — typically ~ sqrt(3/4) * gyro noise (in rad/s)
-  #define MADGWICK_BETA 0.5
+  #define MADGWICK_BETA 0.2
 
 
 #endif
