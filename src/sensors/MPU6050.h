@@ -151,6 +151,8 @@ public:
   );
 
   bool update();
+  // Get gyro values as rad/s in Q16.16
+  void getGyroRad(int32_t &gx, int32_t &gy, int32_t &gz);
 
   /* Tests accelerometer and gyroscope
    * Returns a byte with bits [5:0] being self-test flags where 1 is a pass

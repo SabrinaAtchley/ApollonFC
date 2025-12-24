@@ -92,6 +92,12 @@ bool Sensor_MPU6050::update() {
   return true;
 }
 
+void Sensor_MPU6050::getGyroRad(int32_t &gx, int32_t &gy, int32_t &gz) {
+  const int64_t k_q30 = 18739; // π / 180 / 1000 in Q2.30
+  gx = ((int64_t) gyro.x * k_q30) >> 14; // 30 - 16 = 14
+  gy = ((int64_t) gyro.y * k_q30) >> 14;
+  gz = ((int64_t) gyro.z * k_q30) >> 14;
+}
 
 
 byte Sensor_MPU6050::selfTest() {

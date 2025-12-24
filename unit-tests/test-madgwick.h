@@ -24,11 +24,8 @@ void unitMadgwick() {
       Q16x16 ay = q16x16_div_s(itoq16x16(imu.accel.y), thousand);
       Q16x16 az = q16x16_div_s(itoq16x16(imu.accel.z), thousand);
 
-      // Convert gyro measurements from 0.001°/s to rad/s
-      const int64_t k_q30 = 18739; // π / 180 / 1000 in Q2.30
-      Q16x16 gx = ((int64_t) imu.gyro.x * k_q30) >> 14; // 30 - 16 = 14
-      Q16x16 gy = ((int64_t) imu.gyro.y * k_q30) >> 14;
-      Q16x16 gz = ((int64_t) imu.gyro.z * k_q30) >> 14;
+      Q16x16 gx, gy, gz;
+      imu.getGyroRad(gx, gy, gz);
 
       q = madgwickUpdate(q,
         gx, gy, gz,
