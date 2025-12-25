@@ -92,11 +92,18 @@ bool Sensor_MPU6050::update() {
   return true;
 }
 
-void Sensor_MPU6050::getGyroRad(int32_t &gx, int32_t &gy, int32_t &gz) {
+void Sensor_MPU6050::getGyroRad(Q16x16 &gx, Q16x16 &gy, Q16x16 &gz) {
   const int64_t k_q30 = 18739; // π / 180 / 1000 in Q2.30
   gx = ((int64_t) gyro.x * k_q30) >> 14; // 30 - 16 = 14
   gy = ((int64_t) gyro.y * k_q30) >> 14;
   gz = ((int64_t) gyro.z * k_q30) >> 14;
+}
+
+void Sensor_MPU6050::getAccelG(Q16x16 &ax, Q16x16 &ay, Q16x16 &az) {
+  const Q16x16 thousand = itoq16x16(1000);
+  ax = q16x16_div_s(itoq16x16(accel.x), thousand);
+  ay = q16x16_div_s(itoq16x16(accel.y), thousand);
+  az = q16x16_div_s(itoq16x16(accel.z), thousand);
 }
 
 

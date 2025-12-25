@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "../sensor.h"
+#include "q16x16/q16x16.h"
 
 
 /* MPU6050 Sensor
@@ -152,7 +153,9 @@ public:
 
   bool update();
   // Get gyro values as rad/s in Q16.16
-  void getGyroRad(int32_t &gx, int32_t &gy, int32_t &gz);
+  void getGyroRad(Q16x16 &gx, Q16x16 &gy, Q16x16 &gz);
+  // Get accel values as g in Q16.16
+  void getAccelG(Q16x16 &ax, Q16x16 &ay, Q16x16 &az);
 
   /* Tests accelerometer and gyroscope
    * Returns a byte with bits [5:0] being self-test flags where 1 is a pass
