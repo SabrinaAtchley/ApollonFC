@@ -36,22 +36,38 @@ const Q16x16 pitchSpeedMax = ftoq16x16(PILOT_PITCHSPEED_MAX);
 // Sensor initialization
 // TODO: Revisit sensor configuration for the case of multiple sensors (e.g. 2 barometers)
 #ifdef SENSOR_BMP180
-Sensor_BMP180 bmp180(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
+Sensor_BMP180 *baro;
+// Sensor_BMP180 bmp180(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
 #endif
 #ifdef SENSOR_HMC5883L
-Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
+Sensor_HMC5883L *mag;
+// Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
 #endif
 #ifdef SENSOR_MPU6050
-Sensor_MPU6050 imu(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
+Sensor_MPU6050 *imu;
+// Sensor_MPU6050 imu(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
 #endif
 
 
 
 void Main::setup() {
-  Serial.begin(9600);
+  // Initialize sensors
+  #ifdef SENSOR_BMP180
+  Sensor_BMP180 baro_obj(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
+  baro = &baro_obj;
+  #endif
+  #ifdef SENSOR_HMC5883L
+  Sensor_HMC5883L mag_obj(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
+  mag = &mag_obj;
+  #endif
+  #ifdef SENSOR_MPU6050
+  Sensor_MPU6050 imu_obj(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
+  imu = &imu_obj;
+  #endif
+
 
   // Check IMU
-  if (imu.selfTest() ^ 0x3F) { // Self test failed
+  if (imu->selfTest() ^ 0x3F) { // Self test failed
     ERROR(1);
   }
 
@@ -148,9 +164,9 @@ void slowUpdate(const Q16x16 deltaT) {
 // Read IMU data, PIDs, motor mixing and output
 void fastUpdate(const Q16x16 deltaT) {
   // Read IMU
-  if (imu.update()) {
-    imu.getGyroRad(gx, gy, gz);
-    imu.getAccelG(ax, ay, az);
+  if (imu->update()) {
+    imu->getGyroRad(gx, gy, gz);
+    imu->getAccelG(ax, ay, az);
   }
 
   // TODO: Consider adding sensor bias correction/filtering
