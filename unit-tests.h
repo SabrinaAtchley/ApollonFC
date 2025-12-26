@@ -35,7 +35,7 @@
 
 namespace Tests {
   void setup() {
-    Serial.begin(9600);
+    Serial.println("Beginning unit tests");
 
     #ifdef APOLLON_FC_UNIT_TEST_VECTOR8
       unitVector8();

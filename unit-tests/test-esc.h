@@ -6,16 +6,21 @@
 
 void unitESC() {
   RECEIVER_T receiver;
+  Serial.print("Setting up ESCs... ");
   SpeedController::setup();
+  Serial.println("Done.");
   uint16_t signals[MOTOR_AMOUNT];
   bool isArmed = false;
 
   #define IS_ARM_SWITCH_DOWN (receiver.getChannel(INPUT_CHANNEL_SWA) == INPUT_MOTOR_MAX)
   #define IS_THROTTLE_DOWN (receiver.getChannel(INPUT_CHANNEL_THROTTLE) == INPUT_MOTOR_MIN)
 
+  Serial.print("Calibrating... ");
   SPEED_CONTROLLER_CALIBRATE(signals);
+  Serial.println("Done.");
 
   // Throttle response test
+  Serial.println("Begining main loop");
   while(true) {
     receiver.update();
 
