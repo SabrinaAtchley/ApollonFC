@@ -256,9 +256,10 @@
 
  /* PID output range is mostly arbitrary. It can affect aggressiveness of response,
   * but this is probably better tuned with the coefficients and/or motor mixing matrix
+  * Consider this the "maximum authority" for each axis
   */
- #define PID_OUTPUT_RANGE_MIN -100
- #define PID_OUTPUT_RANGE_MAX 100
+ #define PID_OUTPUT_RANGE_MIN -200
+ #define PID_OUTPUT_RANGE_MAX 200
  /* PID coefficients
   * These are the main PID tuning settings.
   * Each tuple contains the (kp, ki, kd) coefficients, for the
@@ -269,10 +270,16 @@
   *   the derivative term dampens the over and undershoots typical of the integral term
   * For more information, please consult a PID tuning guide online
   */
- #define PID_THROTTLE_COEFFICIENTS ARG_LIST(10, 1, 5)
  #define PID_YAW_COEFFICIENTS      ARG_LIST(10, 1, 5)
  #define PID_PITCH_COEFFICIENTS    ARG_LIST(10, 1, 5)
  #define PID_ROLL_COEFFICIENTS     ARG_LIST(10, 1, 5)
+ /* P values for angle controllers
+  * Related to PIDs, angle mode uses a proportional controller for
+  * converting pitch/roll angles -> rate setpoints. This affects how
+  * "aggressively" we make that correction
+  */
+ #define P_PITCHSPEED 8
+ #define P_ROLLSPEED 8
  /* PID scales
   * These scales are for more convenient coefficients. The "true" coefficient
   * used is just k * scale, e.g. kp * pScale
@@ -282,7 +289,6 @@
   *
   * (pScale, iScale, dScale)
   */
- #define PID_THROTTLE_SCALE ARG_LIST(10, 1, 10)
  #define PID_YAW_SCALE      ARG_LIST(10, 1, 10)
  #define PID_PITCH_SCALE    ARG_LIST(10, 1, 10)
  #define PID_ROLL_SCALE     ARG_LIST(10, 1, 10)
@@ -290,7 +296,6 @@
   * WARNING: large limits can and produce very large over and undershoots
   * and present a safety hazard to you and your equipment. Modify with caution
   */
- #define PID_THROTTLE_INTEGRAL_LIMITS ARG_LIST(-5, 5)
  #define PID_YAW_INTEGRAL_LIMITS      ARG_LIST(-5, 5)
  #define PID_PITCH_INTEGRAL_LIMITS    ARG_LIST(-5, 5)
  #define PID_ROLL_INTEGRAL_LIMITS     ARG_LIST(-5, 5)
