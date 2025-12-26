@@ -18,6 +18,9 @@
 #include "src/motor-controller.h"
 #include "src/pilot-control.h"
 #include "src/peripherals.h"
+#include "src/error.h"
+#include "src/q16x16/q16x16.h"
+#include "src/madgwick.h"
 
 // Sensor boards
 #ifdef SENSOR_BMP180
@@ -30,41 +33,10 @@
 #include "src/sensors/MPU6050.h"
 #endif
 
+void setup();
+void loop();
 
-/* Class instance declarations */
-// Reads input from the radio controller
-RECEIVER_T receiver;
-// Converts receiver input into target drone state values
-PilotControl pilot; // This could be a namespace instead, or we could use it as non-instanced class
-// Handles PIDs, motor mixing, and writing to ESCs
-MotorController motors;
-
-
-// Sensor initialization
-// TODO: Revisit sensor configuration for the case of multiple sensors (e.g. 2 barometers)
-#ifdef SENSOR_BMP180
-Sensor_BMP180 bmp180(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
-#endif
-#ifdef SENSOR_HMC5883L
-Sensor_HMC5883L hmc5883l(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
-#endif
-#ifdef SENSOR_MPU6050
-Sensor_MPU6050 mpu6050(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
-#endif
-
-void setup() {
-  Serial.begin(9600);
-
-  // Motor control module initialization here
-
-  // Calibration code and any other setup here
-
-  // Play start up jingle when finished initializing!
-  Buzzer::ready();
-}
-
-void loop() {
-
-}
+void slowUpdate(const Q16x16 deltaT);
+void fastUpdate(const Q16x16 deltaT);
 
 #endif /* APOLLON_FC_MAIN_H */
