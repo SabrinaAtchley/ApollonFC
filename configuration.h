@@ -205,7 +205,7 @@
  */
 #define MOTOR_AMOUNT 4
 // motor 1, 2, 3, 4
-#define ESC_PINS (3, 10, 11, 12) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
+#define ESC_PINS (9 , 10, 11, 12) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
 // #define ESC_DO_CALIBRATION // Uncomment to automatically calibrate ESCs on startup every time
 
 /* Possibile configurations:
