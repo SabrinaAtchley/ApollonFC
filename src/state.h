@@ -9,6 +9,7 @@
 
 #include "../configuration.h"
 #include "q16x16/q16x16.h"
+#include "quaternion.h"
 
 struct StateEstimate {
   Q16x16 target = 0.0;
@@ -16,6 +17,8 @@ struct StateEstimate {
 };
 
 struct DroneState {
+  Quaternion attitude;
+  Quaternion targetAttitude;
   StateEstimate yawSpeed;
   StateEstimate pitchSpeed;
   StateEstimate rollSpeed;
