@@ -1,6 +1,7 @@
 #ifndef APOLLON_FC_SRC_ESC_H
 #define APOLLON_FC_SRC_ESC_H
 
+#include "Arduino.h"
 #include "../configuration.h"
 #include <Servo.h>
 #include "macros.h"
