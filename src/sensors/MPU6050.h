@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "../sensor.h"
-#include "q16x16/q16x16.h"
+#include "../q16x16/q16x16.h"
 
 
 /* MPU6050 Sensor
