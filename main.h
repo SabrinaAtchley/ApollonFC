@@ -33,8 +33,10 @@
 #include "src/sensors/MPU6050.h"
 #endif
 
-void setup();
-void loop();
+namespace Main {
+  void setup();
+  void loop();
+}
 
 void slowUpdate(const Q16x16 deltaT);
 void fastUpdate(const Q16x16 deltaT);

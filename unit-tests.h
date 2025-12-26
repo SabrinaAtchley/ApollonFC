@@ -30,44 +30,45 @@
  *  APOLLON_FC_UNIT_TEST_QUATERNION
  *  APOLLON_FC_UNIT_TEST_MADGWICK
  */
-#define APOLLON_FC_UNIT_TEST_MADGWICK
+#define APOLLON_FC_UNIT_TEST_ESC
 
 
-void setup() {
-  Serial.begin(9600);
+namespace Tests {
+  void setup() {
+    Serial.begin(9600);
 
-  #ifdef APOLLON_FC_UNIT_TEST_VECTOR8
-    unitVector8();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_RECEIVERS
-    unitReceivers();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_ESC
-    unitESC();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_SENSORS
-    unitSensors();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
-    unitArrayQueue();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_PID
-    unitPID();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_PILOT_CONTROL
-    unitPilotControl();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_Q16X16
-    unitQ16x16();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_QUATERNION
-    unitQuaternion();
-  #endif
-  #ifdef APOLLON_FC_UNIT_TEST_MADGWICK
-    unitMadgwick();
-  #endif
+    #ifdef APOLLON_FC_UNIT_TEST_VECTOR8
+      unitVector8();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_RECEIVERS
+      unitReceivers();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_ESC
+      unitESC();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_SENSORS
+      unitSensors();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_ARRAY_QUEUE
+      unitArrayQueue();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_PID
+      unitPID();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_PILOT_CONTROL
+      unitPilotControl();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_Q16X16
+      unitQ16x16();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_QUATERNION
+      unitQuaternion();
+    #endif
+    #ifdef APOLLON_FC_UNIT_TEST_MADGWICK
+      unitMadgwick();
+    #endif
+  }
+  void loop(){};
 }
-
-void loop(){};
 
 #endif

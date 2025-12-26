@@ -5,3 +5,19 @@
 #else
 #include "main.h"
 #endif
+
+void setup() {
+  #ifdef TEST_MODE
+  Tests::setup();
+  #else
+  Main::setup();
+  #endif
+}
+
+void loop() {
+  #ifdef TEST_MODE
+  Tests::loop();
+  #else
+  Main::loop();
+  #endif
+}

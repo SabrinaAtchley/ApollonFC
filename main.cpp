@@ -47,7 +47,7 @@ Sensor_MPU6050 imu(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SC
 
 
 
-void setup() {
+void Main::setup() {
   Serial.begin(9600);
 
   // Check IMU
@@ -60,7 +60,7 @@ void setup() {
 }
 
 // Main process loop
-void loop() {
+void Main::loop() {
   if (micros() >= nextFastUpdate) {
     Q16x16 fastDeltaT = micros() - lastFastUpdate;
     lastFastUpdate = micros();
