@@ -1,10 +1,71 @@
 #include "motor-controller.h"
 
-MotorController::MotorController()
-  : pidYaw(PID_YAW_COEFFICIENTS, PID_YAW_SCALE, PID_YAW_INTEGRAL_LIMITS, 0x00008000),
-    pidPitch(PID_PITCH_COEFFICIENTS, PID_PITCH_SCALE, PID_PITCH_INTEGRAL_LIMITS, 0x00008000),
-    pidRoll(PID_ROLL_COEFFICIENTS, PID_ROLL_SCALE, PID_ROLL_INTEGRAL_LIMITS, 0x00008000)
-{
+const Q16x16 pidAlpha = 0x00008000;
+
+// Helpers for converting arg list macros into Q16x16 numbers
+void threeArgListToQ16x16(
+    const Q16x16 a, const Q16x16 b, const Q16x16 c,
+    Q16x16 &arg1, Q16x16 &arg2, Q16x16 &arg3
+) {
+  arg1 = ftoq16x16(a);
+  arg2 = ftoq16x16(b);
+  arg3 = ftoq16x16(c);
+}
+
+void twoArgListToQ16x16(
+    const Q16x16 a, const Q16x16 b,
+    Q16x16 &arg1, Q16x16 &arg2
+) {
+  arg1 = ftoq16x16(a);
+  arg2 = ftoq16x16(b);
+}
+
+MotorController::MotorController() {
+  Q16x16 pidRollP, pidRollI, pidRollD;
+  Q16x16 pidRollScaleP, pidRollScaleI, pidRollScaleD;
+  Q16x16 pidRollIntegralMin, pidRollIntegralMax;
+  threeArgListToQ16x16(PID_ROLL_COEFFICIENTS, pidRollP, pidRollI, pidRollD);
+  threeArgListToQ16x16(PID_ROLL_SCALE, pidRollScaleP, pidRollScaleI, pidRollScaleD);
+  twoArgListToQ16x16(PID_ROLL_INTEGRAL_LIMITS, pidRollIntegralMin, pidRollIntegralMax);
+
+  Q16x16 pidPitchP, pidPitchI, pidPitchD;
+  Q16x16 pidPitchScaleP, pidPitchScaleI, pidPitchScaleD;
+  Q16x16 pidPitchIntegralMin, pidPitchIntegralMax;
+  threeArgListToQ16x16(PID_ROLL_COEFFICIENTS, pidPitchP, pidPitchI, pidPitchD);
+  threeArgListToQ16x16(PID_ROLL_SCALE, pidPitchScaleP, pidPitchScaleI, pidPitchScaleD);
+  twoArgListToQ16x16(PID_ROLL_INTEGRAL_LIMITS, pidPitchIntegralMin, pidPitchIntegralMax);
+
+  Q16x16 pidYawP, pidYawI, pidYawD;
+  Q16x16 pidYawScaleP, pidYawScaleI, pidYawScaleD;
+  Q16x16 pidYawIntegralMin, pidYawIntegralMax;
+  threeArgListToQ16x16(PID_ROLL_COEFFICIENTS, pidYawP, pidYawI, pidYawD);
+  threeArgListToQ16x16(PID_ROLL_SCALE, pidYawScaleP, pidYawScaleI, pidYawScaleD);
+  twoArgListToQ16x16(PID_ROLL_INTEGRAL_LIMITS, pidYawIntegralMin, pidYawIntegralMax);
+
+  static PID pidRollObj(
+    pidRollP, pidRollI, pidRollD,
+    pidRollScaleP, pidRollScaleI, pidRollScaleD,
+    pidRollIntegralMin, pidRollIntegralMax,
+    pidAlpha
+  );
+  pidRoll = &pidRollObj;
+  static PID pidPitchObj(
+    pidPitchP, pidPitchI, pidPitchD,
+    pidPitchScaleP, pidPitchScaleI, pidPitchScaleD,
+    pidPitchIntegralMin, pidPitchIntegralMax,
+    pidAlpha
+  );
+  pidPitch = &pidPitchObj;
+  static PID pidYawObj(
+    pidYawP, pidYawI, pidYawD,
+    pidYawScaleP, pidYawScaleI, pidYawScaleD,
+    pidYawIntegralMin, pidYawIntegralMax,
+    pidAlpha
+  );
+  pidYaw = &pidYawObj;
+
+  // Initialize ESCs
+
   SpeedController::setup();
 
   // Automatic ESC calibration, recommended off
@@ -29,15 +90,36 @@ inline void MotorController::throttleDown() {
 }
 
 // Send last stored motor signals to the controller
-inline void MotorController::loop() {
+void MotorController::loop() {
   SpeedController::write(signals);
 }
 
 void MotorController::update(const DroneState &state, const unsigned long &deltaT) {
-  control[0] =    state.throttle.target;
-  control[1] =     pidRoll.update(state.rollSpeed.target,  state.rollSpeed.estimate,  deltaT);
-  control[2] =    pidPitch.update(state.pitchSpeed.target, state.pitchSpeed.estimate, deltaT);
-  control[3] =      pidYaw.update(state.yawSpeed.target,   state.yawSpeed.estimate,   deltaT);
+  // Convert Q16x16 to integer part (truncate fractional bits)
+  control[0] =    state.throttle.target >> 16;
+  control[1] =     pidRoll->update(state.rollSpeed.target,  state.rollSpeed.estimate,  deltaT) >> 16;
+  control[2] =    pidPitch->update(state.pitchSpeed.target, state.pitchSpeed.estimate, deltaT) >> 16;
+  control[3] =      pidYaw->update(state.yawSpeed.target,   state.yawSpeed.estimate,   deltaT) >> 16;
+
+  // Serial.print(state.rollSpeed.target);
+  // Serial.print(",");
+  // Serial.print(state.rollSpeed.estimate);
+  // Serial.print(",");
+  // Serial.println(q16x16_sub_s(state.rollSpeed.target, state.rollSpeed.estimate));
+
+  // Serial.print(pidRoll->getLastPTerm());
+  // Serial.print(",");
+  // Serial.print(pidRoll->getLastITerm());
+  // Serial.print(",");
+  // Serial.println(pidRoll->getLastDTerm());
+
+  // Serial.print(control[0]);
+  // Serial.print(",");
+  // Serial.print(control[1]);
+  // Serial.print(",");
+  // Serial.print(control[2]);
+  // Serial.print(",");
+  // Serial.println(control[3]);
 
   // Multiply control vector by the motor mixing matrix to get the signal vector
   for (uint8_t i = 0; i < MOTOR_AMOUNT; i++) {

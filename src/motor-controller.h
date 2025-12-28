@@ -20,9 +20,9 @@
 class MotorController {
 private:
   uint16_t signals[MOTOR_AMOUNT];
-  PID pidYaw;
-  PID pidPitch;
-  PID pidRoll;
+  PID *pidYaw;
+  PID *pidPitch;
+  PID *pidRoll;
   Q16x16 control[4]; // throttle, roll, pitch, yaw
   Q16x16 mixingMatrix[MOTOR_AMOUNT][4] = MOTOR_MIXING_MATRIX;
 
