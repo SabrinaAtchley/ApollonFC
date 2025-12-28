@@ -5,19 +5,14 @@
 #include "../src/esc.h"
 
 void unitESC() {
-  RECEIVER_T receiver;
-  Serial.print("Setting up ESCs... ");
-  SpeedController::setup();
-  Serial.println("Done.");
   uint16_t signals[MOTOR_AMOUNT];
+  SpeedController::setup();
+  SPEED_CONTROLLER_CALIBRATE(signals);
+  RECEIVER_T receiver;
   bool isArmed = false;
 
-  #define IS_ARM_SWITCH_DOWN (receiver.getChannel(INPUT_CHANNEL_SWA) == INPUT_MOTOR_MAX)
+  #define IS_ARM_SWITCH_DOWN (receiver.getChannel(INPUT_SOFT_ARM_SWITCH) == INPUT_MOTOR_MAX)
   #define IS_THROTTLE_DOWN (receiver.getChannel(INPUT_CHANNEL_THROTTLE) == INPUT_MOTOR_MIN)
-
-  Serial.print("Calibrating... ");
-  SPEED_CONTROLLER_CALIBRATE(signals);
-  Serial.println("Done.");
 
   // Throttle response test
   Serial.println("Begining main loop");
@@ -25,9 +20,10 @@ void unitESC() {
     receiver.update();
 
     isArmed = (isArmed && IS_ARM_SWITCH_DOWN) || (IS_ARM_SWITCH_DOWN && IS_THROTTLE_DOWN);
+    const uint16_t throttle = CLAMP(receiver.getChannel(INPUT_CHANNEL_THROTTLE), INPUT_IDLE_SIG, INPUT_MOTOR_MAX);
     SPEED_CONTROLLER_WRITE_ALL(
       signals,
-      isArmed ? receiver.getChannel(INPUT_CHANNEL_THROTTLE) : INPUT_MOTOR_MIN
+      isArmed ? throttle : INPUT_MOTOR_MIN
     );
 
     Serial.println(receiver.getChannel(INPUT_CHANNEL_THROTTLE));
