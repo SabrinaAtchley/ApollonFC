@@ -2,11 +2,11 @@
 
 /* Class instance declarations */
 // Reads input from the radio controller
-RECEIVER_T receiver;
+RECEIVER_T *receiver;
 // Converts receiver input into target drone state values
 PilotControl pilot; // This could be a namespace instead, or we could use it as non-instanced class
 // Handles PIDs, motor mixing, and writing to ESCs
-MotorController motors;
+MotorController *motors;
 DroneState state;
 
 const Q16x16 k_pitchRate = ftoq16x16(P_PITCHSPEED);
@@ -48,22 +48,29 @@ Sensor_MPU6050 *imu;
 // Sensor_MPU6050 imu(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
 #endif
 
-
+#define IS_ARM_SWITCH_DOWN (abs(receiver->getChannel(INPUT_SOFT_ARM_SWITCH) - INPUT_MOTOR_MAX) <= 2)
+#define IS_THROTTLE_DOWN (abs(receiver->getChannel(INPUT_CHANNEL_THROTTLE) - INPUT_MOTOR_MIN) <= 2)
 
 void Main::setup() {
   // Initialize sensors
   #ifdef SENSOR_BMP180
-  Sensor_BMP180 baro_obj(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
+  static Sensor_BMP180 baro_obj(BMP180_MODE_ULTRA_HIGH_RES, 102070); // oss, pressure at sea level
   baro = &baro_obj;
   #endif
   #ifdef SENSOR_HMC5883L
-  Sensor_HMC5883L mag_obj(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
+  static Sensor_HMC5883L mag_obj(HMC5883L_MODE_SINGLE, HMC5883L_GAIN_1, HMC5883L_OSS_3);
   mag = &mag_obj;
   #endif
   #ifdef SENSOR_MPU6050
-  Sensor_MPU6050 imu_obj(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
+  static Sensor_MPU6050 imu_obj(false, false, false, MPU6050_GYRO_SCALE_500, MPU6050_ACCEL_SCALE_4G);
   imu = &imu_obj;
   #endif
+
+  // Initialize receiver and motors
+  static RECEIVER_T receiver_obj;
+  receiver = &receiver_obj;
+  static MotorController motor_obj;
+  motors = &motor_obj;
 
 
   // Check IMU
@@ -96,13 +103,21 @@ void Main::loop() {
     slowDeltaT = itoq16x16(slowDeltaT) / 1000000;
     slowUpdate(slowDeltaT);
   }
+
+  Serial.println(state.isArmed);
+  // Refresh motors as fast as possible
+  if (!state.isArmed) {
+    motors->throttleDown();
+  }
+
+  motors->loop();
 }
 
 // Read pilot commands, Estimate current attitude, angle PIDs
 void slowUpdate(const Q16x16 deltaT) {
   // Read pilot commands and update drone state
-  receiver.update();
-  pilot.update(state, receiver);
+  receiver->update();
+  pilot.update(state, *receiver);
 
   // Convert pilot commands into radians
   // TODO: Consider folding this into the Pilot Control module
@@ -175,10 +190,12 @@ void fastUpdate(const Q16x16 deltaT) {
   state.pitchSpeed.estimate = gy;
   state.yawSpeed.estimate = gz;
 
+  state.isArmed = (state.isArmed && IS_ARM_SWITCH_DOWN)
+    || (IS_ARM_SWITCH_DOWN && IS_THROTTLE_DOWN);
+
+  // Update motor signals
   if (state.isArmed) {
     // PID update and create mixed motor signals
-    motors.update(state, deltaT);
-    // Write to motors
-    // motors.loop();
+    motors->update(state, deltaT);
   }
 }
