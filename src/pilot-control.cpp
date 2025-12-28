@@ -32,7 +32,8 @@ static constexpr PROGMEM Q16x16 rollSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLSP
 static constexpr PROGMEM Q16x16 pitchSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHSPEED)};
 static constexpr PROGMEM Q16x16 rollAngleLUT[] = {GENERATE_LUT_DATA(PILOT_ROLLANGLE)};
 static constexpr PROGMEM Q16x16 pitchAngleLUT[] = {GENERATE_LUT_DATA(PILOT_PITCHANGLE)};
-static constexpr PROGMEM Q16x16 verticalSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_VERTICALSPEED)};
+// static constexpr PROGMEM Q16x16 verticalSpeedLUT[] = {GENERATE_LUT_DATA(PILOT_VERTICALSPEED)};
+static constexpr PROGMEM Q16x16 throttleLUT[] = {GENERATE_LUT_DATA(PILOT_THROTTLE)};
 
 inline Q16x16 PilotControl::interpolate(
     const Q16x16* lut,
@@ -98,7 +99,7 @@ void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
     case FLIGHT_MODE_ANGLE:
       // TODO: This should likely take the raw PWM output as the "Base" throttle
       state.throttle.target = interpolate(
-        verticalSpeedLUT,
+        throttleLUT,
         receiver.getChannel(INPUT_CHANNEL_THROTTLE)
       );
 
@@ -120,7 +121,7 @@ void PilotControl::update(DroneState &state, RECEIVER_T &receiver) {
 
     case FLIGHT_MODE_ACRO:
       state.throttle.target = interpolate(
-        verticalSpeedLUT,
+        throttleLUT,
         receiver.getChannel(INPUT_CHANNEL_THROTTLE)
       );
 
