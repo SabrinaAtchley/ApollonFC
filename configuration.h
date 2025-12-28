@@ -41,8 +41,9 @@
 /* This value should be set somewhere in the middle of the INPUT_MOTOR min and max
  * It should be the lowest value the motors can spin at when armed, providing
  * negligible force.
+ * Recommend 5% of range to start with (e.g. range [1000, 2000] = 1050)
  */
-#define INPUT_IDLE_SIG  1100
+#define INPUT_IDLE_SIG  1050
 
 // Input deadzones (snapping points)
 #define INPUT_DEADZONE_WIDTH 30
@@ -78,6 +79,11 @@
 // m/s
 #define PILOT_VERTICALSPEED_MIN   -2.0
 #define PILOT_VERTICALSPEED_MAX   10.0
+
+// microseconds
+#define PILOT_THROTTLE_MIN 1000
+#define PILOT_THROTTLE_MID 1500
+#define PILOT_THROTTLE_MAX 2000
 /* Midpoint values. These are the output values for when the sticks are in
  * the neutral position. You almost certainly want these to be kept at 0.
  */
@@ -109,6 +115,7 @@
 #define PILOT_ROLLANGLE_K     -3.0
 #define PILOT_PITCHANGLE_K    -3.0
 #define PILOT_VERTICALSPEED_K -0.5
+#define PILOT_THROTTLE_K -0.5
 
 /* Number of entries, expressed as an exponent of 2, to include in each lookup
  * table (LUT) for the response curve profiles. There are currently 6 LUTs, and
@@ -205,7 +212,7 @@
  */
 #define MOTOR_AMOUNT 4
 // motor 1, 2, 3, 4
-#define ESC_PINS (9 , 10, 11, 12) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
+#define ESC_PINS (6 , 9, 10, 11) //TODO: CHECK PINS AGAINST MOTOR NUMBERS
 // #define ESC_DO_CALIBRATION // Uncomment to automatically calibrate ESCs on startup every time
 
 /* Possibile configurations:
@@ -243,8 +250,8 @@
  * can be found in sensor-configuration.h
  */
 
-#define SENSOR_BMP180
-#define SENSOR_HMC5883L
+// #define SENSOR_BMP180
+// #define SENSOR_HMC5883L
 #define SENSOR_MPU6050
 
 
