@@ -19,7 +19,8 @@ public:
 
 private:
   void getSignal(const uint8_t ch) {
-    channels[ch] = ppmReader.latestValidChannelValue(ch + 1, INPUT_MOTOR_MIN);
+    // Use last value as default
+    channels[ch] = ppmReader.latestValidChannelValue(ch + 1, channels[ch]);
   }
 };
 
