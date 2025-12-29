@@ -104,7 +104,7 @@ void Main::loop() {
     slowUpdate(slowDeltaT);
   }
 
-  Serial.println(state.isArmed);
+  // Serial.println(state.isArmed);
   // Refresh motors as fast as possible
   if (!state.isArmed) {
     motors->throttleDown();
