@@ -89,6 +89,22 @@ bool Sensor_MPU6050::update() {
   gyro.y = (int64_t) gyro.y * 1000000 >> binScale;
   gyro.z = (int64_t) gyro.z * 1000000 >> binScale;
 
+  // Invert axes
+  #ifdef SENSOR_INVERT_X
+  accel.x = -accel.x;
+  gyro.x = -gyro.x;
+  #endif
+
+  #ifdef SENSOR_INVERT_Y
+  accel.y = -accel.y;
+  gyro.y = -gyro.y;
+  #endif
+
+  #ifdef SENSOR_INVERT_Z
+  accel.z = -accel.z;
+  gyro.z = -gyro.z;
+  #endif
+
   return true;
 }
 

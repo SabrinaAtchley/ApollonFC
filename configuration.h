@@ -82,7 +82,7 @@
 
 // microseconds
 #define PILOT_THROTTLE_MIN 1000
-#define PILOT_THROTTLE_MID 1500
+#define PILOT_THROTTLE_MID 1350 // Recommend to be tuned to the hoverpoint
 #define PILOT_THROTTLE_MAX 2000
 /* Midpoint values. These are the output values for when the sticks are in
  * the neutral position. You almost certainly want these to be kept at 0.
@@ -228,11 +228,12 @@
  * row 3 - contribution of motor 3 to throttle, roll, pitch, yaw
  * row 4 - contribution of motor 4 to throttle, roll, pitch, yaw
  * and so on for higher rotor counts
+ * In NED, roll right = +x, pitch down = +y, yaw right = +z
  */
-#define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0,  1.0,  1.0}, \
-                                     { 1.0,  1.0, -1.0,  1.0}, \
-                                     { 1.0,  1.0,  1.0, -1.0}, \
-                                     { 1.0, -1.0, -1.0, -1.0} }
+#define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0, -1.0,  1.0}, \
+                                     { 1.0,  1.0,  1.0,  1.0}, \
+                                     { 1.0,  1.0, -1.0, -1.0}, \
+                                     { 1.0, -1.0,  1.0, -1.0} }
 
 #define MOTOR_MIXING_MATRIX_QUAD_PLUS { { 1.0, -1.0,  0.0, -1.0}, \
                                         { 1.0,  1.0,  0.0, -1.0}, \
@@ -253,6 +254,16 @@
 // #define SENSOR_BMP180
 // #define SENSOR_HMC5883L
 #define SENSOR_MPU6050
+
+/* Invert Sensor axis
+ *
+ * Used to rotate axis
+ * Note: You should invert *exactly two or zero* axis to keep the right hand rule
+ */
+
+#define SENSOR_INVERT_X
+// #define SENSOR_INVERT_Y
+#define SENSOR_INVERT_Z
 
 
 /* PID Configuration
@@ -277,16 +288,16 @@
   *   the derivative term dampens the over and undershoots typical of the integral term
   * For more information, please consult a PID tuning guide online
   */
- #define PID_YAW_COEFFICIENTS      ARG_LIST(10, 1, 5)
- #define PID_PITCH_COEFFICIENTS    ARG_LIST(10, 1, 5)
- #define PID_ROLL_COEFFICIENTS     ARG_LIST(10, 1, 5)
+ #define PID_YAW_COEFFICIENTS      ARG_LIST(35, 20, 0)
+ #define PID_PITCH_COEFFICIENTS    ARG_LIST(60, 45, 0)
+ #define PID_ROLL_COEFFICIENTS     ARG_LIST(60, 45, 0)
  /* P values for angle controllers
   * Related to PIDs, angle mode uses a proportional controller for
   * converting pitch/roll angles -> rate setpoints. This affects how
   * "aggressively" we make that correction
   */
- #define P_PITCHSPEED 8
- #define P_ROLLSPEED 8
+ #define P_PITCHSPEED 3.5
+ #define P_ROLLSPEED 1.5
  /* PID scales
   * These scales are for more convenient coefficients. The "true" coefficient
   * used is just k * scale, e.g. kp * pScale
@@ -303,9 +314,9 @@
   * WARNING: large limits can and produce very large over and undershoots
   * and present a safety hazard to you and your equipment. Modify with caution
   */
- #define PID_YAW_INTEGRAL_LIMITS      ARG_LIST(-5, 5)
- #define PID_PITCH_INTEGRAL_LIMITS    ARG_LIST(-5, 5)
- #define PID_ROLL_INTEGRAL_LIMITS     ARG_LIST(-5, 5)
+ #define PID_YAW_INTEGRAL_LIMITS      ARG_LIST(-60, 60)
+ #define PID_PITCH_INTEGRAL_LIMITS    ARG_LIST(-80, 80)
+ #define PID_ROLL_INTEGRAL_LIMITS     ARG_LIST(-80, 80)
 
  /* Madgwick filter configuration
   * ACCEL_GATE_LOW: low value in g's to accept accelerometer data. Lower values
