@@ -228,12 +228,12 @@
  * row 3 - contribution of motor 3 to throttle, roll, pitch, yaw
  * row 4 - contribution of motor 4 to throttle, roll, pitch, yaw
  * and so on for higher rotor counts
- * In NED, roll right = +x, pitch down = +y, yaw right = +z
+ * In NED, roll right = +x, pitch up = +y, yaw right = +z
  */
-#define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0, -1.0,  1.0}, \
-                                     { 1.0,  1.0,  1.0,  1.0}, \
-                                     { 1.0,  1.0, -1.0, -1.0}, \
-                                     { 1.0, -1.0,  1.0, -1.0} }
+#define MOTOR_MIXING_MATRIX_QUAD_X { { 1.0, -1.0,  1.0,  1.0}, \
+                                     { 1.0,  1.0, -1.0,  1.0}, \
+                                     { 1.0,  1.0,  1.0, -1.0}, \
+                                     { 1.0, -1.0, -1.0, -1.0} }
 
 #define MOTOR_MIXING_MATRIX_QUAD_PLUS { { 1.0, -1.0,  0.0, -1.0}, \
                                         { 1.0,  1.0,  0.0, -1.0}, \
@@ -288,9 +288,9 @@
   *   the derivative term dampens the over and undershoots typical of the integral term
   * For more information, please consult a PID tuning guide online
   */
- #define PID_YAW_COEFFICIENTS      ARG_LIST(35, 20, 0)
- #define PID_PITCH_COEFFICIENTS    ARG_LIST(60, 45, 0)
- #define PID_ROLL_COEFFICIENTS     ARG_LIST(60, 45, 0)
+ #define PID_YAW_COEFFICIENTS      ARG_LIST(5, 0, 0)
+ #define PID_PITCH_COEFFICIENTS    ARG_LIST(15, 0, 0)
+ #define PID_ROLL_COEFFICIENTS     ARG_LIST(7, 0, 0)
  /* P values for angle controllers
   * Related to PIDs, angle mode uses a proportional controller for
   * converting pitch/roll angles -> rate setpoints. This affects how
