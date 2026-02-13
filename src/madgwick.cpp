@@ -49,6 +49,10 @@ Quaternion calculateBetaS(
     Quaternion s(0, 0, 0, 0);
     return s;
   };
+  // Invert accelerometer (measures specific force, not gravity direction)
+  ax = q16x16_negate(ax);
+  ay = q16x16_negate(ay);
+  az = q16x16_negate(az);
 
   Quaternion d_g(0, 0, 0, 0x00010000); // Gravity in world frame
   // q* x <0, 0, 0, 1> x q
