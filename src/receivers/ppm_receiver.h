@@ -18,9 +18,30 @@ public:
   PPM_Receiver() : ppmReader(SERIAL_RECEIVER_PIN, INPUT_CHANNELS) {}
 
 private:
+  unsigned long microsAtLastVariance = 0;
+  uint16_t lastRawValues[INPUT_CHANNELS];
+  bool areRawValuesInitialized = false;
+
   void getSignal(const uint8_t ch) {
-    // Use last value as default
-    channels[ch] = ppmReader.latestValidChannelValue(ch + 1, channels[ch]);
+    if (!areRawValuesInitialized) {
+      for (uint8_t ch = 0; ch < INPUT_CHANNELS; ch++) {
+        lastRawValues[ch] == ppmReader.rawChannelValue(ch + 1);
+      }
+      areRawValuesInitialized = true;
+    }
+
+    // If the channel is unchanged for > x micros, we've lost signal (no noise)
+    uint16_t currentRawValue = ppmReader.rawChannelValue(ch + 1);
+    if (lastRawValues[ch] == currentRawValue) {
+      if (micros() - microsAtLastVariance > 500000L) {
+        channels[ch] = INPUT_MOTOR_MIN;
+      }
+    } else { // Signal has varied
+      microsAtLastVariance = micros();
+      channels[ch] = ppmReader.latestValidChannelValue(ch + 1, channels[ch]);
+    }
+
+    lastRawValues[ch] = currentRawValue;
   }
 };
 
